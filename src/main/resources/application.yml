@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Spring-E-Commerce
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_e_commerce
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tankhoa1334@gmail.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+jwt:
+  secret: 537d832ec79561168510b3a901c5f5a14ee81b6294bf0d044e585a4700caf24e22b2ac5e2c632d2d8f7c90293ee8f6dbdf6c62d37cff99884fe0690cd77f05b67bb68f3e02c7b8a0954592bdf207f3087fc17e1dd87e8edafb641cfafe009af673ab9970976d8d06208e067bc6d86945b64dad4e19ccffda76af1cd6587675c7109060f688833ee9ed685556dff2f21ae03139889b0f3fdad05fc31e67176a59a9bd777bf4a5e2e06ba88b5e384849862103700e61ec81c3bb2ea02252fbf13fa21f6a55d23c9178448befa5e05479b32c925b657a33aa65ec07faeb923db970032707c4cb6dca6ce4c460e9023d85d85b02a9ddb5de5b9ec88220de423142cb
+  access-token:
+    expiration: 3600000
+  refresh-token:
+    expiration: 604800000
+app:
+  file-storage:
+    location: E:/Warehouse/E-Commerce/
