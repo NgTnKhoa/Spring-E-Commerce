@@ -27,8 +27,8 @@ public class Category extends Base {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "images")
-  private List<String> images;
+  @Column(name = "image")
+  private String image;
 
   @Column(name = "featured")
   private boolean featured;
