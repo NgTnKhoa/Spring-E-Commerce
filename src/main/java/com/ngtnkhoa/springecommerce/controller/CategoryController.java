@@ -29,14 +29,14 @@ public class CategoryController {
 
   @GetMapping
   public ResponseEntity<BaseResponse> findAll(
+      @RequestParam(required = false) Boolean featured,
       @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size
-  ) {
-    Page<CategoryResponse> categories = categoryService.findAll(page, size);
+      @RequestParam(defaultValue = "10") int size) {
+    Page<CategoryResponse> categories = categoryService.findAll(featured, page, size);
     return ResponseEntity
         .ok()
         .body(BaseResponse.builder()
-            .message("Get all categories successfully")
+            .message("Get categories successfully")
             .status(true)
             .data(categories)
             .statusCode(HttpStatus.OK.value())
@@ -104,39 +104,6 @@ public class CategoryController {
             .status(true)
             .statusCode(HttpStatus.OK.value())
             .data(category)
-            .build());
-  }
-
-  @GetMapping("/filter")
-  public ResponseEntity<BaseResponse> findByParams(
-      @RequestParam Boolean featured,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
-    Page<CategoryResponse> categories = categoryService.findByParams(featured, page, size);
-    return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get categories successfully")
-            .status(true)
-            .data(categories)
-            .statusCode(HttpStatus.OK.value())
-            .build());
-  }
-
-  @GetMapping("/{id}/products")
-  public ResponseEntity<BaseResponse> findProductsById(
-      @PathVariable Long id,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size
-  ) {
-    Page<ProductResponse> products = productService.findByCategoryId(id, page, size);
-    return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get all products by category ID successfully")
-            .status(true)
-            .data(products)
-            .statusCode(HttpStatus.OK.value())
             .build());
   }
 

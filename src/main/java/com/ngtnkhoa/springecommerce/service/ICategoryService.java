@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ICategoryService {
 
   @Transactional(readOnly = true)
-  Page<CategoryResponse> findAll(int page, int size);
+  Page<CategoryResponse> findAll(Boolean featured, int page, int size);
 
   @Transactional
   CategoryResponse create(CategoryRequest categoryRequest);
@@ -22,6 +22,4 @@ public interface ICategoryService {
   CategoryResponse findById(Long id);
 
   CategoryResponse findBySlug(String slug);
-
-  Page<CategoryResponse> findByParams(Boolean featured, int page, int size);
 }

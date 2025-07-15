@@ -106,7 +106,7 @@ public class ProductController {
 
   @GetMapping("/filter")
   public ResponseEntity<BaseResponse> findByParams(
-      @RequestParam Boolean featured,
+      @RequestParam(required = false) Boolean featured,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size
   ) {

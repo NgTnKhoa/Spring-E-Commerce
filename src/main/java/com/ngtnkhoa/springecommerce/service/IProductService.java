@@ -5,6 +5,7 @@ import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 public interface IProductService {
@@ -25,7 +26,16 @@ public interface IProductService {
 
   ProductResponse findBySlug(String slug);
 
-  Page<ProductResponse> findByCategoryId(Long categoryId, int page, int size);
+  Page<ProductResponse> findByCategoryId(
+      Long categoryId,
+      List<String> colors,
+      List<String> brands,
+      Double minPrice,
+      Double maxPrice,
+      String keyword,
+      int page,
+      int size
+  );
 
   Page<ProductResponse> findByParams(Boolean featured, int page, int size);
 

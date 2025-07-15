@@ -87,7 +87,16 @@ public class ProductService implements IProductService {
   }
 
   @Override
-  public Page<ProductResponse> findByCategoryId(Long categoryId, int page, int size) {
+  public Page<ProductResponse> findByCategoryId(
+      Long categoryId,
+      List<String> colors,
+      List<String> brands,
+      Double minPrice,
+      Double maxPrice,
+      String keyword,
+      int page,
+      int size
+  ) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
     Page<Product> products = productRepository.findAllByCategory_Id(categoryId, pageable);
     return products

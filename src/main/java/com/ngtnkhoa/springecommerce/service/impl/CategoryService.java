@@ -23,9 +23,9 @@ public class CategoryService implements ICategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public Page<CategoryResponse> findAll(int page, int size) {
+  public Page<CategoryResponse> findAll(Boolean featured, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-    Page<Category> categories = categoryRepository.findAll(pageable);
+    Page<Category> categories = categoryRepository.filter(featured, pageable);
     return categories
         .map(category -> categoryMapper
             .toCategoryResponse(categoryMapper
@@ -81,15 +81,5 @@ public class CategoryService implements ICategoryService {
     } else {
       throw new IllegalArgumentException("Category not found");
     }
-  }
-
-  @Override
-  public Page<CategoryResponse> findByParams(Boolean featured, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-    Page<Category> categories = categoryRepository.filter(featured, pageable);
-    return categories
-        .map(category -> categoryMapper
-            .toCategoryResponse(categoryMapper
-                .toCategoryDTO(category)));
   }
 }
