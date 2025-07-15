@@ -24,6 +24,8 @@ public interface IProductService {
 
   ProductResponse findById(Long id);
 
+  ProductResponse findBySlug(String slug);
+
   Page<ProductResponse> findByCategoryId(Long categoryId, int page, int size);
 
   List<ProductResponse> findFeatured();

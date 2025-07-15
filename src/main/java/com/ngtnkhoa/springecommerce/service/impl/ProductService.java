@@ -76,6 +76,17 @@ public class ProductService implements IProductService {
   }
 
   @Override
+  public ProductResponse findBySlug(String slug) {
+    if (productRepository.existsBySlug(slug)) {
+      return productMapper
+          .toProductResponse(productMapper
+              .toProductDTO(productRepository.findBySlug(slug)));
+    } else {
+      throw new IllegalArgumentException("Product not found");
+    }
+  }
+
+  @Override
   public Page<ProductResponse> findByCategoryId(Long categoryId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
     Page<Product> products = productRepository.findAllByCategory_Id(categoryId, pageable);

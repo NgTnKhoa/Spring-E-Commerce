@@ -92,6 +92,18 @@ public class ProductController {
             .build());
   }
 
+  @GetMapping("/{slug}")
+  public ResponseEntity<BaseResponse> findBySlug(@PathVariable String slug) {
+    ProductResponse product = productService.findBySlug(slug);
+    return ResponseEntity.ok()
+        .body(BaseResponse.builder()
+            .message("Get product successfully")
+            .status(true)
+            .statusCode(HttpStatus.OK.value())
+            .data(product)
+            .build());
+  }
+
   @GetMapping("/featured")
   public ResponseEntity<BaseResponse> findAllFeaturedProducts() {
     List<ProductResponse> products = productService.findFeatured();
