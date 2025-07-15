@@ -40,6 +40,9 @@ public class Product extends Base {
   @Column(name = "discount")
   private double discount;
 
+  @Column(name = "brand")
+  private String brand;
+
   @Column(name = "status")
   private String status;
 

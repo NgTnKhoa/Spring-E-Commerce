@@ -14,13 +14,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring", imports = SlugUtil.class)
 public interface ProductMapper {
 
-    @Mapping(source = "category.id", target = "categoryId")
     @Mapping(source = "colors", target = "colors")
     ProductDTO toProductDTO(Product product);
 
     ProductResponse toProductResponse(ProductDTO productDTO);
 
-    @Mapping(source = "categoryId", target = "category.id")
     @Mapping(source = "colors", target = "colors")
     @Mapping(target = "slug", expression = "java(SlugUtil.toSlug(productRequest.getName()))")
     Product toProductEntity(ProductRequest productRequest);

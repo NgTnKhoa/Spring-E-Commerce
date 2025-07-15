@@ -29,6 +29,9 @@ public class ProductRequest {
 
     private double discount;
 
+    @NotBlank(message = "Brand is required")
+    private String brand;
+
     @NotBlank(message = "Status is required")
     private String status;
 
