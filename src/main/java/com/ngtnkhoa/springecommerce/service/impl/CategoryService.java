@@ -71,4 +71,15 @@ public class CategoryService implements ICategoryService {
             .toCategoryDTO(categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"))));
   }
+
+  @Override
+  public CategoryResponse findBySlug(String slug) {
+    if (categoryRepository.existsBySlug(slug)) {
+      return categoryMapper
+          .toCategoryResponse(categoryMapper
+              .toCategoryDTO(categoryRepository.findBySlug(slug)));
+    } else {
+      throw new IllegalArgumentException("Category not found");
+    }
+  }
 }

@@ -94,6 +94,19 @@ public class CategoryController {
             .build());
   }
 
+  @GetMapping("/{slug}")
+  public ResponseEntity<BaseResponse> findBySlug(@PathVariable String slug) {
+    CategoryResponse category = categoryService.findBySlug(slug);
+    return ResponseEntity
+        .ok()
+        .body(BaseResponse.builder()
+            .message("Get category successfully")
+            .status(true)
+            .statusCode(HttpStatus.OK.value())
+            .data(category)
+            .build());
+  }
+
   @GetMapping("/{id}/products")
   public ResponseEntity<BaseResponse> findProductsById(
       @PathVariable Long id,

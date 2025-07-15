@@ -7,4 +7,8 @@ import com.ngtnkhoa.springecommerce.entity.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
   boolean existsByName(String name);
+
+  boolean existsBySlug(String slug);
+
+  Category findBySlug(String slug);
 }

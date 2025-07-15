@@ -5,8 +5,6 @@ import com.ngtnkhoa.springecommerce.dto.response.CategoryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 public interface ICategoryService {
 
   @Transactional(readOnly = true)
@@ -22,4 +20,6 @@ public interface ICategoryService {
   void delete(Long id);
 
   CategoryResponse findById(Long id);
+
+  CategoryResponse findBySlug(String slug);
 }
