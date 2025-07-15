@@ -27,14 +27,31 @@ public class ProductController {
 
   @GetMapping
   public ResponseEntity<BaseResponse> findAll(
+      @RequestParam(required = false) Boolean featured,
+      @RequestParam(required = false) Long categoryId,
+      @RequestParam(required = false) List<String> colors,
+      @RequestParam(required = false) List<String> brands,
+      @RequestParam(required = false) Double minPrice,
+      @RequestParam(required = false) Double maxPrice,
+      @RequestParam(required = false) String keyword,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size
   ) {
-    Page<ProductResponse> products = productService.findAll(page, size);
+    Page<ProductResponse> products = productService.findAll(
+        featured,
+        categoryId,
+        colors,
+        brands,
+        minPrice,
+        maxPrice,
+        keyword,
+        page,
+        size
+    );
     return ResponseEntity
         .ok()
         .body(BaseResponse.builder()
-            .message("Get all products successfully")
+            .message("Get products successfully")
             .status(true)
             .data(products)
             .statusCode(HttpStatus.OK.value())
@@ -101,23 +118,6 @@ public class ProductController {
             .status(true)
             .statusCode(HttpStatus.OK.value())
             .data(product)
-            .build());
-  }
-
-  @GetMapping("/filter")
-  public ResponseEntity<BaseResponse> findByParams(
-      @RequestParam(required = false) Boolean featured,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size
-  ) {
-    Page<ProductResponse> products = productService.findByParams(featured, page, size);
-    return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get products successfully")
-            .status(true)
-            .data(products)
-            .statusCode(HttpStatus.OK.value())
             .build());
   }
 

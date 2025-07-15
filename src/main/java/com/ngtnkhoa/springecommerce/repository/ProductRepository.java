@@ -24,11 +24,25 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   boolean existsBySlug(String slug);
 
   @Query("""
-          SELECT p FROM Product p
-          WHERE (:featured IS NULL OR p.featured = :featured)
-      """)
+    SELECT DISTINCT p
+    FROM Product p
+    LEFT JOIN p.colors c
+    WHERE (:featured IS NULL OR p.featured = :featured)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
+      AND (:colors IS NULL OR c IN :colors)
+      AND (:colors IS NULL OR p.brand IN :brands)
+      AND (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
+""")
   Page<Product> filter(
       @Param("featured") Boolean featured,
+      @Param("categoryId") Long categoryId,
+      @Param("colors") List<String> colors,
+      @Param("brands") List<String> brands,
+      @Param("minPrice") Double minPrice,
+      @Param("maxPrice") Double maxPrice,
+      @Param("keyword") String keyword,
       Pageable pageable
   );
 }

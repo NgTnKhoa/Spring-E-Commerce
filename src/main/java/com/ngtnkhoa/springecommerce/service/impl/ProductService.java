@@ -27,9 +27,28 @@ public class ProductService implements IProductService {
   private final ProductRepository productRepository;
 
   @Override
-  public Page<ProductResponse> findAll(int page, int size) {
+  public Page<ProductResponse> findAll(
+      Boolean featured,
+      Long categoryId,
+      List<String> colors,
+      List<String> brands,
+      Double minPrice,
+      Double maxPrice,
+      String keyword,
+      int page,
+      int size
+  ) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-    Page<Product> products = productRepository.findAll(pageable);
+    Page<Product> products = productRepository.filter(
+        featured,
+        categoryId,
+        colors,
+        brands,
+        minPrice,
+        maxPrice,
+        keyword,
+        pageable
+    );
     return products
         .map(product -> productMapper
             .toProductResponse(productMapper
@@ -84,35 +103,6 @@ public class ProductService implements IProductService {
     } else {
       throw new IllegalArgumentException("Product not found");
     }
-  }
-
-  @Override
-  public Page<ProductResponse> findByCategoryId(
-      Long categoryId,
-      List<String> colors,
-      List<String> brands,
-      Double minPrice,
-      Double maxPrice,
-      String keyword,
-      int page,
-      int size
-  ) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-    Page<Product> products = productRepository.findAllByCategory_Id(categoryId, pageable);
-    return products
-        .map(product -> productMapper
-            .toProductResponse(productMapper
-                .toProductDTO(product)));
-  }
-
-  @Override
-  public Page<ProductResponse> findByParams(Boolean featured, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-    Page<Product> products = productRepository.filter(featured, pageable);
-    return products
-        .map(product -> productMapper
-            .toProductResponse(productMapper
-                .toProductDTO(product)));
   }
 
   @Override

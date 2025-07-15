@@ -11,7 +11,17 @@ import java.util.Set;
 public interface IProductService {
 
   @Transactional(readOnly = true)
-  Page<ProductResponse> findAll(int page, int size);
+  Page<ProductResponse> findAll(
+      Boolean featured,
+      Long categoryId,
+      List<String> colors,
+      List<String> brands,
+      Double minPrice,
+      Double maxPrice,
+      String keyword,
+      int page,
+      int size
+  );
 
   @Transactional
   ProductResponse create(ProductRequest productRequest);
@@ -25,19 +35,6 @@ public interface IProductService {
   ProductResponse findById(Long id);
 
   ProductResponse findBySlug(String slug);
-
-  Page<ProductResponse> findByCategoryId(
-      Long categoryId,
-      List<String> colors,
-      List<String> brands,
-      Double minPrice,
-      Double maxPrice,
-      String keyword,
-      int page,
-      int size
-  );
-
-  Page<ProductResponse> findByParams(Boolean featured, int page, int size);
 
   Set<String> findColorsByCategoryId(Long categoryId);
 }
