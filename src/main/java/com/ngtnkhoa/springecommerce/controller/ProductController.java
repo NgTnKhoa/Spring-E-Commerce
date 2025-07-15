@@ -114,7 +114,7 @@ public class ProductController {
     return ResponseEntity
         .ok()
         .body(BaseResponse.builder()
-            .message("Get all products successfully")
+            .message("Get products successfully")
             .status(true)
             .data(products)
             .statusCode(HttpStatus.OK.value())

@@ -107,6 +107,22 @@ public class CategoryController {
             .build());
   }
 
+  @GetMapping("/filter")
+  public ResponseEntity<BaseResponse> findByParams(
+      @RequestParam Boolean featured,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size) {
+    Page<CategoryResponse> categories = categoryService.findByParams(featured, page, size);
+    return ResponseEntity
+        .ok()
+        .body(BaseResponse.builder()
+            .message("Get categories successfully")
+            .status(true)
+            .data(categories)
+            .statusCode(HttpStatus.OK.value())
+            .build());
+  }
+
   @GetMapping("/{id}/products")
   public ResponseEntity<BaseResponse> findProductsById(
       @PathVariable Long id,

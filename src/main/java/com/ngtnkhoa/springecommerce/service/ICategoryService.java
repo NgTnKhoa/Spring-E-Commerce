@@ -22,4 +22,6 @@ public interface ICategoryService {
   CategoryResponse findById(Long id);
 
   CategoryResponse findBySlug(String slug);
+
+  Page<CategoryResponse> findByParams(Boolean featured, int page, int size);
 }
