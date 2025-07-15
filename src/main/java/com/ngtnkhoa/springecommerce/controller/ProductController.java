@@ -104,13 +104,17 @@ public class ProductController {
             .build());
   }
 
-  @GetMapping("/featured")
-  public ResponseEntity<BaseResponse> findAllFeaturedProducts() {
-    List<ProductResponse> products = productService.findFeatured();
+  @GetMapping("/filter")
+  public ResponseEntity<BaseResponse> findByParams(
+      @RequestParam Boolean featured,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size
+  ) {
+    Page<ProductResponse> products = productService.findByParams(featured, page, size);
     return ResponseEntity
         .ok()
         .body(BaseResponse.builder()
-            .message("Get All Featured Products Successfully")
+            .message("Get all products successfully")
             .status(true)
             .data(products)
             .statusCode(HttpStatus.OK.value())

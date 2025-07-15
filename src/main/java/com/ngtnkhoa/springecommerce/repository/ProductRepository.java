@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ngtnkhoa.springecommerce.entity.Product;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -20,4 +22,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   Product findBySlug(String slug);
 
   boolean existsBySlug(String slug);
+
+  @Query("""
+          SELECT p FROM Product p
+          WHERE (:featured IS NULL OR p.featured = :featured)
+      """)
+  Page<Product> filter(
+      @Param("featured") Boolean featured,
+      Pageable pageable
+  );
 }

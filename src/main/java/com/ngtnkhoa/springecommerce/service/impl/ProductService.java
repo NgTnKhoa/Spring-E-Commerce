@@ -97,13 +97,13 @@ public class ProductService implements IProductService {
   }
 
   @Override
-  public List<ProductResponse> findFeatured() {
-    return productRepository.findAll()
-        .stream()
-        .filter(Product::isFeatured)
+  public Page<ProductResponse> findByParams(Boolean featured, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+    Page<Product> products = productRepository.filter(featured, pageable);
+    return products
         .map(product -> productMapper
             .toProductResponse(productMapper
-                .toProductDTO(product))).toList();
+                .toProductDTO(product)));
   }
 
   @Override
