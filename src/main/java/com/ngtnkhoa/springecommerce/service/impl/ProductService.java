@@ -8,7 +8,6 @@ import com.ngtnkhoa.springecommerce.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -107,11 +106,6 @@ public class ProductService implements IProductService {
 
   @Override
   public Set<String> findColorsByCategoryId(Long categoryId) {
-    List<Product> products = productRepository.findAllByCategory_Id(categoryId);
-    return products
-        .stream()
-        .filter(p -> p.getColors() != null && !p.getColors().isEmpty())
-        .flatMap(p -> p.getColors().stream())
-        .collect(Collectors.toSet());
+    return productRepository.findColorsByCategoryId(categoryId);
   }
 }
