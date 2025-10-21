@@ -27,8 +27,10 @@ public class Category extends Base {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "image")
-  private String image;
+  @ElementCollection
+  @CollectionTable(name = "category_images", joinColumns = @JoinColumn(name = "category_id"))
+  @Column(name = "images")
+  private List<String> images;
 
   @Column(name = "featured")
   private boolean featured;

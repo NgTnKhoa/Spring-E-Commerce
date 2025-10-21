@@ -35,6 +35,10 @@ jwt:
     expiration: 3600000
   refresh-token:
     expiration: 604800000
+payos:
+  client-id: 588556c7-706f-4430-9838-4c28724a0186
+  api-key: 39a042a6-7b14-471f-95fd-87285a8c81b2
+  checksum-key: 12f310852f6cb89f8f7fabc281fc149c06fc2b74e405dc8b075ea774ce7f2760
 app:
   file-storage:
     location: E:/Warehouse/E-Commerce/

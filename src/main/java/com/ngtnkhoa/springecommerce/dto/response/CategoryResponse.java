@@ -11,7 +11,7 @@ public class CategoryResponse {
   private String name;
   private String slug;
   private String description;
-  private String image;
+  private List<String> images;
   private boolean featured;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
