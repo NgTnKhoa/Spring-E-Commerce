@@ -30,7 +30,7 @@ public class Payment extends Base {
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "order_id")
   private Order order;
 }

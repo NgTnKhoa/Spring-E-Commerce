@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,22 +18,30 @@ import lombok.NoArgsConstructor;
 @Table(name = "orders")
 public class Order extends Base {
 
-  @Column(name = "amount")
-  private double amount;
+  @Column(name = "order_code")
+  private String orderCode;
 
-  @Column(name = "status")
-  private String status;
+  @Column(name = "total_amount")
+  private double totalAmount;
 
   @Column(name = "address")
   private String address;
 
-  @OneToMany(mappedBy = "order")
-  private List<OrderItem> orderItems;
+  @Column(name = "status")
+  private String status;
+
+  @Column(name = "payment_method")
+  private String paymentMethod;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToOne(mappedBy = "order")
-  private Payment payment;
+  @OneToMany(mappedBy = "order")
+  @Cascade(CascadeType.ALL)
+  private List<Payment> payments;
+
+  @OneToMany(mappedBy = "order")
+  @Cascade(CascadeType.ALL)
+  private List<OrderItem> orderItems;
 }

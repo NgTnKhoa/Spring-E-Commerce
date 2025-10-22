@@ -8,11 +8,13 @@ import java.util.List;
 @Data
 public class OrderDTO {
   private Long id;
-  private double amount;
-  private String status;
+  private String orderCode;
+  private double totalAmount;
   private String address;
+  private String status;
+  private String paymentMethod;
   private UserDTO user;
-  private PaymentDTO payment;
+  private List<PaymentDTO> payments;
   private List<OrderItemDTO> orderItems;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;

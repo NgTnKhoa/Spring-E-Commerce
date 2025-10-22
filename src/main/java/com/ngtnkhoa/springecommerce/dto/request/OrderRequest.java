@@ -15,14 +15,17 @@ public class OrderRequest {
   @NotNull(message = "User ID is required")
   private Long userId;
 
-  @Positive(message = "Amount must be greater than 0")
-  private double amount;
+  @Positive(message = "Total amount must be greater than 0")
+  private double totalAmount;
 
   @NotBlank(message = "Status is required")
   private String status;
 
   @NotBlank(message = "Address is required")
   private String address;
+
+  @NotBlank(message = "Payment method is required")
+  private String paymentMethod;
 
   @NotEmpty(message = "Order must contain at least one item")
   private List<@Valid OrderItemRequest> orderItems;
