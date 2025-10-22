@@ -10,8 +10,9 @@ public class OrderItemResponse {
   private Long productId;
   private Long orderId;
   private int quantity;
-  private double price;
-  private double amount;
+  private double unitPrice;
+  private double discount;
+  private double totalPrice;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }

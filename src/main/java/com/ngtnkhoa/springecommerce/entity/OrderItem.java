@@ -18,19 +18,23 @@ import lombok.NoArgsConstructor;
 @Table(name = "order_items")
 public class OrderItem extends Base {
 
-  @Column(name = "product_id", nullable = false)
-  private String productId;
-
   @Column(name = "quantity")
   private int quantity;
 
-  @Column(name = "price")
-  private double price;
+  @Column(name = "unit_price")
+  private double unitPrice;
 
-  @Column(name = "amount")
-  private double amount;
+  @Column(name = "discount")
+  private double discount;
+
+  @Column(name = "total_price")
+  private double totalPrice;
 
   @ManyToOne
-  @JoinColumn(name = "order_id")
+  @JoinColumn(name = "product_id", nullable = false)
+  private Product product;
+
+  @ManyToOne
+  @JoinColumn(name = "order_id", nullable = false)
   private Order order;
 }

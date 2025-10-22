@@ -1,6 +1,7 @@
 package com.ngtnkhoa.springecommerce.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -18,8 +19,12 @@ public class OrderItemRequest {
   private int quantity;
 
   @Positive(message = "Amount must be greater than 0")
-  private double price;
+  private double unitPrice;
+
+  @Min(value = 0, message = "Discount must be at least 0")
+  @Max(value = 100, message = "Discount must be not exceed 100")
+  private double discount;
 
   @Positive(message = "Amount must be greater than 0")
-  private double amount;
+  private double totalPrice;
 }

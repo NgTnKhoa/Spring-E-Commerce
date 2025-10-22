@@ -57,6 +57,10 @@ public class Product extends Base {
   @Cascade(CascadeType.ALL)
   private List<Review> reviews;
 
+  @OneToMany(mappedBy = "product")
+  @Cascade(CascadeType.ALL)
+  private List<OrderItem> orderItems;
+
   @ManyToOne
   @JoinColumn(name = "category_id")
   private Category category;

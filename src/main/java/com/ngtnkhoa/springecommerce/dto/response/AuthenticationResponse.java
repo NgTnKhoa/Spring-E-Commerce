@@ -21,7 +21,5 @@ public class AuthenticationResponse {
 
   private Long id;
 
-  private String username;
-
-  private UserRole role;
+  private UserResponse user;
 }
