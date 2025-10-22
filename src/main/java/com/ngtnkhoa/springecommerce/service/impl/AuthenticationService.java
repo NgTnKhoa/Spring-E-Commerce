@@ -9,13 +9,16 @@ import com.ngtnkhoa.springecommerce.entity.User;
 import com.ngtnkhoa.springecommerce.dto.request.LoginRequest;
 import com.ngtnkhoa.springecommerce.dto.request.RegisterRequest;
 import com.ngtnkhoa.springecommerce.dto.response.AuthenticationResponse;
+import com.ngtnkhoa.springecommerce.mapper.UserMapper;
 import com.ngtnkhoa.springecommerce.repository.TokenRepository;
 import com.ngtnkhoa.springecommerce.repository.UserRepository;
 import com.ngtnkhoa.springecommerce.service.IAuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +35,7 @@ public class AuthenticationService implements IAuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final UserMapper userMapper;
 
   @Override
   public AuthenticationResponse register(RegisterRequest registerRequest) {
@@ -48,13 +52,13 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     User user = User.builder()
-        .name(registerRequest.getName())
-        .email(registerRequest.getEmail())
-        .username(registerRequest.getUsername())
-        .password(passwordEncoder.encode(registerRequest.getPassword()))
-        .phoneNumber(registerRequest.getPhoneNumber())
-        .role(UserRole.USER)
-        .build();
+            .name(registerRequest.getName())
+            .email(registerRequest.getEmail())
+            .username(registerRequest.getUsername())
+            .password(passwordEncoder.encode(registerRequest.getPassword()))
+            .phoneNumber(registerRequest.getPhoneNumber())
+            .role(UserRole.USER)
+            .build();
 
     User savedUser = userRepository.save(user);
     String jwtToken = jwtService.generateToken(user);
@@ -63,25 +67,25 @@ public class AuthenticationService implements IAuthenticationService {
     saveUserToken(savedUser, jwtToken);
 
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .refreshToken(refreshToken)
-        .id(savedUser.getId())
-        .username(user.getUsername())
-        .role(UserRole.USER)
-        .build();
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .id(savedUser.getId())
+            .user(userMapper.toUserResponse(
+                    userMapper.toUserDTO(savedUser)))
+            .build();
   }
 
   @Override
   public AuthenticationResponse login(LoginRequest loginRequest) {
     authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginRequest.getUsername(),
-            loginRequest.getPassword()
-        )
+            new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+            )
     );
 
     User user = userRepository.findByUsername(loginRequest.getUsername())
-        .orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
+            .orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -89,22 +93,23 @@ public class AuthenticationService implements IAuthenticationService {
     saveUserToken(user, jwtToken);
 
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .refreshToken(refreshToken)
-        .id(user.getId())
-        .username(user.getUsername())
-        .role(user.getRole())
-        .build();
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .id(user.getId())
+            .user(userMapper.toUserResponse(
+                    userMapper.toUserDTO(user)
+            ))
+            .build();
   }
 
   private void saveUserToken(User savedUser, String jwtToken) {
     Token token = Token.builder()
-        .user(savedUser)
-        .token(jwtToken)
-        .tokenType(TokenType.BEARER)
-        .expired(false)
-        .revoked(false)
-        .build();
+            .user(savedUser)
+            .token(jwtToken)
+            .tokenType(TokenType.BEARER)
+            .expired(false)
+            .revoked(false)
+            .build();
 
     tokenRepository.save(token);
   }
@@ -139,7 +144,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     if (username != null) {
       User user = userRepository.findByUsername(username)
-          .orElseThrow();
+              .orElseThrow();
 
       if (jwtService.validateToken(refreshToken, user)) {
         String accessToken = jwtService.generateToken(user);
@@ -148,9 +153,9 @@ public class AuthenticationService implements IAuthenticationService {
         saveUserToken(user, accessToken);
 
         AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
-            .build();
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
 
         new ObjectMapper().writeValue(response.getOutputStream(), authenticationResponse);
       }

@@ -17,8 +17,8 @@ public class OrderResponse {
   private String address;
   private String paymentMethod;
   private UserResponse user;
-  private List<PaymentResponse> payments;
   private List<OrderItemResponse> orderItems;
+  private List<PaymentResponse> payments;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }
