@@ -11,8 +11,8 @@ public class PaymentRequest {
   @NotNull(message = "Order ID is required")
   private Long orderId;
 
-  @NotBlank(message = "Transaction ID is required")
-  private String transactionId;
+  @NotBlank(message = "Transaction code is required")
+  private String transactionCode;
 
   @NotBlank(message = "Status is required")
   private String status;

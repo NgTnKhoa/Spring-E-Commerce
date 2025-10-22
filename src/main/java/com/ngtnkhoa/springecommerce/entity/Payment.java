@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "payments")
 public class Payment extends Base {
 
+  @Column(name = "transaction_code")
+  private String transactionCode;
+
   @Column(name = "status")
   private String status;
 
@@ -22,9 +25,6 @@ public class Payment extends Base {
 
   @Column(name = "amount")
   private String amount;
-
-  @Column(name = "transaction_id")
-  private String transactionId;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
