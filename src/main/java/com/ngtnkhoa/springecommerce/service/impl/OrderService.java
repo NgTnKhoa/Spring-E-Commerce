@@ -10,7 +10,9 @@ import com.ngtnkhoa.springecommerce.repository.OrderItemRepository;
 import com.ngtnkhoa.springecommerce.repository.OrderRepository;
 import com.ngtnkhoa.springecommerce.service.IOrderService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,10 @@ public class OrderService implements IOrderService {
 
   @Override
   public OrderResponse create(OrderRequest orderRequest) {
-    Order order = orderRepository.save(orderMapper.toOrderEntity(orderRequest));
+    Order order = orderMapper.toOrderEntity(orderRequest);
+    order.setOrderCode(generateOrderCode());
+    orderRepository.save(order);
+
     List<OrderItem> orderItems = orderRequest.getOrderItems().stream()
         .map(itemReq -> {
           OrderItem item = orderItemMapper.toOrderItemEntity(itemReq);
@@ -90,5 +95,12 @@ public class OrderService implements IOrderService {
         .map(order -> orderMapper
             .toOrderResponse(orderMapper
                 .toOrderDTO(order)));
+  }
+
+  private String generateOrderCode() {
+    String prefix = "ORD";
+    String year = String.valueOf(LocalDate.now().getYear());
+    String uniquePart = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+    return prefix + "-" + year + "-" + uniquePart;
   }
 }
