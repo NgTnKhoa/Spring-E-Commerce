@@ -7,6 +7,7 @@ import com.ngtnkhoa.springecommerce.service.IFileDataService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,28 @@ public class FileDataService implements IFileDataService {
   private String warehousePath;
 
   @Override
-  public void uploadFile(MultipartFile file) throws IOException {
-    String filePath = warehousePath + file.getOriginalFilename();
+  public void uploadFile(List<MultipartFile> files) throws IOException {
+    if (files == null || files.isEmpty()) {
+      throw new IllegalArgumentException("No files provided");
+    }
 
-    fileDataRepository.save(FileData.builder()
-        .name(file.getOriginalFilename())
-        .type(file.getContentType())
-        .filePath(filePath).build());
+    for (MultipartFile file : files) {
+      if (file.isEmpty()) continue;
 
-    file.transferTo(new File(filePath));
+      String filePath = warehousePath + File.separator + file.getOriginalFilename();
+
+      fileDataRepository.save(FileData.builder()
+              .name(file.getOriginalFilename())
+              .type(file.getContentType())
+              .filePath(filePath)
+              .build());
+
+      File dest = new File(filePath);
+      dest.getParentFile().mkdirs();
+
+      file.transferTo(dest);
+    }
   }
-
 
   @Override
   public byte[] downloadFile(String fileName) throws IOException {

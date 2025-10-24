@@ -4,6 +4,7 @@ import com.ngtnkhoa.springecommerce.dto.response.BaseResponse;
 import com.ngtnkhoa.springecommerce.service.IFileDataService;
 
 import java.io.IOException;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,23 +26,23 @@ public class FileDataController {
   private final IFileDataService fileDataService;
 
   @PostMapping
-  public ResponseEntity<BaseResponse> upload(@RequestParam("file") MultipartFile file) throws IOException {
-    fileDataService.uploadFile(file);
+  public ResponseEntity<BaseResponse> upload(@RequestParam("files") List<MultipartFile> files) throws IOException {
+    fileDataService.uploadFile(files);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Uploaded successfully")
-            .statusCode(HttpStatus.NO_CONTENT.value())
-            .status(true)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Uploaded successfully")
+                    .statusCode(HttpStatus.NO_CONTENT.value())
+                    .status(true)
+                    .build());
   }
 
   @GetMapping("/{fileName}")
   public ResponseEntity<?> download(@PathVariable String fileName) throws IOException {
     byte[] fileData = fileDataService.downloadFile(fileName);
     return ResponseEntity
-        .ok()
-        .contentType(MediaType.valueOf("image/png"))
-        .body(fileData);
+            .ok()
+            .contentType(MediaType.valueOf("image/png"))
+            .body(fileData);
   }
 }
