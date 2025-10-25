@@ -7,6 +7,8 @@ import com.ngtnkhoa.springecommerce.service.IFileDataService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,18 +35,16 @@ public class FileDataService implements IFileDataService {
     for (MultipartFile file : files) {
       if (file.isEmpty()) continue;
 
-      String filePath = warehousePath + File.separator + file.getOriginalFilename();
+      Path filePath = Paths.get(warehousePath, file.getOriginalFilename());
 
       fileDataRepository.save(FileData.builder()
               .name(file.getOriginalFilename())
               .type(file.getContentType())
-              .filePath(filePath)
+              .filePath(filePath.toString())
               .build());
 
-      File dest = new File(filePath);
-      dest.getParentFile().mkdirs();
-
-      file.transferTo(dest);
+      Files.createDirectories(filePath.getParent());
+      file.transferTo(filePath.toFile());
     }
   }
 
