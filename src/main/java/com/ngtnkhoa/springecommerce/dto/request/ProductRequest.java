@@ -1,8 +1,10 @@
 package com.ngtnkhoa.springecommerce.dto.request;
 
+import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,10 +19,6 @@ public class ProductRequest {
   @NotBlank(message = "Description is required")
   private String description;
 
-  @NotEmpty(message = "At least one image is required")
-  @Size(max = 5, message = "At most 5 images allowed")
-  private List<@NotBlank(message = "Each image URL must not be blank") String> images;
-
   @Positive(message = "Amount must be greater than 0")
   private double price;
 
@@ -32,8 +30,15 @@ public class ProductRequest {
   @NotBlank(message = "Status is required")
   private String status;
 
+  private boolean featured;
+
+  @NotBlank(message = "Main image is required")
+  private String mainImage;
+
+  @NotEmpty(message = "At least one image is required")
+  @Size(max = 5, message = "At most 5 images allowed")
+  private List<@NotBlank(message = "Each image URL must not be blank") ProductImage> images;
+
   @NotEmpty(message = "At least one colors is required")
   private List<@NotBlank(message = "Each color must not be blank") String> colors;
-
-  private boolean featured;
 }

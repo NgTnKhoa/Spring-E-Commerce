@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.entity;
 
+import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -28,16 +29,6 @@ public class Product extends Base {
   @Column(name = "description")
   private String description;
 
-  @ElementCollection
-  @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "images")
-  private List<String> images;
-
-  @ElementCollection
-  @CollectionTable(name = "product_colors", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "colors")
-  private List<String> colors;
-
   @Column(name = "price")
   private double price;
 
@@ -50,8 +41,20 @@ public class Product extends Base {
   @Column(name = "status")
   private String status;
 
-  @Column(name = "featured")
+  @Column(name = "featured", columnDefinition = "boolean default false")
   private boolean featured;
+
+  @Column(name = "main_image")
+  private String mainImage;
+
+  @ElementCollection
+  @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+  private List<ProductImage> images;
+
+  @ElementCollection
+  @CollectionTable(name = "product_colors", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "colors")
+  private List<String> colors;
 
   @OneToMany(mappedBy = "product")
   @Cascade(CascadeType.ALL)
