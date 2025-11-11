@@ -27,11 +27,12 @@ public class FileDataController {
 
   @PostMapping
   public ResponseEntity<BaseResponse> upload(@RequestParam("files") List<MultipartFile> files) throws IOException {
-    fileDataService.uploadFile(files);
+    List<String> listFileNames = fileDataService.uploadFile(files);
     return ResponseEntity
             .ok()
             .body(BaseResponse.builder()
                     .message("Uploaded successfully")
+                    .data(listFileNames)
                     .statusCode(HttpStatus.NO_CONTENT.value())
                     .status(true)
                     .build());

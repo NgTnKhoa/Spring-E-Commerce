@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +29,9 @@ public class FileDataService implements IFileDataService {
   private String warehousePath;
 
   @Override
-  public void uploadFile(List<MultipartFile> files) throws IOException {
+  public List<String> uploadFile(List<MultipartFile> files) throws IOException {
+    List<String> uploadedFileNames = new ArrayList<>();
+
     if (files == null || files.isEmpty()) {
       throw new IllegalArgumentException("No files provided");
     }
@@ -35,17 +39,28 @@ public class FileDataService implements IFileDataService {
     for (MultipartFile file : files) {
       if (file.isEmpty()) continue;
 
-      Path filePath = Paths.get(warehousePath, file.getOriginalFilename());
+      String originalFilename = file.getOriginalFilename();
+      String extension = "";
+
+      if (originalFilename != null && originalFilename.contains(".")) {
+        extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+      }
+
+      String uniqueFilename = UUID.randomUUID() + extension;
+      Path filePath = Paths.get(warehousePath, uniqueFilename);
 
       fileDataRepository.save(FileData.builder()
-              .name(file.getOriginalFilename())
+              .name(uniqueFilename)
               .type(file.getContentType())
               .filePath(filePath.toString())
               .build());
 
       Files.createDirectories(filePath.getParent());
       file.transferTo(filePath.toFile());
+      uploadedFileNames.add(uniqueFilename);
     }
+
+    return uploadedFileNames;
   }
 
   @Override
