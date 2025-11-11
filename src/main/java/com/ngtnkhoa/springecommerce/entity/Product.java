@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.entity;
 
+import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
 import jakarta.persistence.*;
 
@@ -54,7 +55,7 @@ public class Product extends Base {
   @ElementCollection
   @CollectionTable(name = "product_colors", joinColumns = @JoinColumn(name = "product_id"))
   @Column(name = "colors")
-  private List<String> colors;
+  private List<ProductColor> colors;
 
   @OneToMany(mappedBy = "product")
   @Cascade(CascadeType.ALL)

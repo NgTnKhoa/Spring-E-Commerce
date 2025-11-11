@@ -3,7 +3,6 @@ package com.ngtnkhoa.springecommerce.entity.emb;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductImage {
+public class ProductColor {
 
-  @Column(name = "path")
-  @NotBlank(message = "Image URL must not be blank")
+  @Column(name = "name")
+  @NotBlank(message = "Color name must not be blank")
   private String path;
 
-  @Column(name = "sort_order")
-  @Positive(message = "Sort order must be greater than 0")
-  private int sortOrder;
+  @Column(name = "hex")
+  @NotBlank(message = "Hex code must be greater than 0")
+  private String hex;
 }

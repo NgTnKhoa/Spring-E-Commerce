@@ -1,6 +1,8 @@
 package com.ngtnkhoa.springecommerce.dto.request;
 
+import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -37,8 +39,9 @@ public class ProductRequest {
 
   @NotEmpty(message = "At least one image is required")
   @Size(max = 5, message = "At most 5 images allowed")
-  private List<@NotBlank(message = "Each image URL must not be blank") ProductImage> images;
+  private List<@Valid ProductImage> images;
 
-  @NotEmpty(message = "At least one colors is required")
-  private List<@NotBlank(message = "Each color must not be blank") String> colors;
+  @NotEmpty(message = "At least one color is required")
+  @Size(max = 5, message = "At most 5 colors allowed")
+  private List<@Valid ProductColor> colors;
 }

@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.dto;
 
+import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
 import lombok.Data;
 
@@ -19,7 +20,7 @@ public class ProductDTO {
   private boolean featured;
   private String mainImage;
   private List<ProductImage> images;
-  private List<String> colors;
+  private List<ProductColor> colors;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }
