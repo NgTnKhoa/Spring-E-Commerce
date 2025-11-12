@@ -3,7 +3,6 @@ package com.ngtnkhoa.springecommerce.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class CategoryDTO {
@@ -11,8 +10,9 @@ public class CategoryDTO {
   private String name;
   private String slug;
   private String description;
-  private List<String> images;
+  private String image;
   private boolean featured;
+  private String status;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }

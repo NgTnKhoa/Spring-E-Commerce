@@ -18,9 +18,11 @@ public class CategoryRequest {
   @Size(max = 1000, message = "Description must not exceed 1000 characters")
   private String description;
 
-  @NotEmpty(message = "At least one image is required")
-  @Size(max = 5, message = "At most 5 images allowed")
-  private List<@NotBlank(message = "Each image URL must not be blank") String> images;
+  @NotBlank(message = "Image is required")
+  private String image;
 
   private boolean featured;
+
+  @NotBlank(message = "Status is required")
+  private String status;
 }

@@ -27,13 +27,14 @@ public class Category extends Base {
   @Column(name = "description")
   private String description;
 
-  @ElementCollection
-  @CollectionTable(name = "category_images", joinColumns = @JoinColumn(name = "category_id"))
-  @Column(name = "images")
-  private List<String> images;
+  @Column(name = "image")
+  private String image;
 
   @Column(name = "featured")
   private boolean featured;
+
+  @Column(name = "status")
+  private String status;
 
   @OneToMany(mappedBy = "category")
   @Cascade(CascadeType.ALL)
