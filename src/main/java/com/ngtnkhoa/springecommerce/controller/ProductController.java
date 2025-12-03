@@ -97,17 +97,17 @@ public class ProductController {
             .build());
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
-    ProductResponse product = productService.findById(id);
-    return ResponseEntity.ok()
-        .body(BaseResponse.builder()
-            .message("Get product successfully")
-            .status(true)
-            .statusCode(HttpStatus.OK.value())
-            .data(product)
-            .build());
-  }
+//  @GetMapping("/{id}")
+//  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
+//    ProductResponse product = productService.findById(id);
+//    return ResponseEntity.ok()
+//        .body(BaseResponse.builder()
+//            .message("Get product successfully")
+//            .status(true)
+//            .statusCode(HttpStatus.OK.value())
+//            .data(product)
+//            .build());
+//  }
 
   @GetMapping("/{slug}")
   public ResponseEntity<BaseResponse> findBySlug(@PathVariable String slug) {

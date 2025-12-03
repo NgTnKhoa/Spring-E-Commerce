@@ -50,11 +50,12 @@ public class Product extends Base {
 
   @ElementCollection
   @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+  @Cascade(CascadeType.ALL)
   private List<ProductImage> images;
 
   @ElementCollection
   @CollectionTable(name = "product_colors", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "colors")
+  @Cascade(CascadeType.ALL)
   private List<ProductColor> colors;
 
   @OneToMany(mappedBy = "product")

@@ -15,7 +15,7 @@ public class ProductColor {
 
   @Column(name = "name")
   @NotBlank(message = "Color name must not be blank")
-  private String path;
+  private String name;
 
   @Column(name = "hex")
   @NotBlank(message = "Hex code must be greater than 0")

@@ -19,6 +19,8 @@ public class ProductDTO {
   private String status;
   private boolean featured;
   private String mainImage;
+  private Long categoryId;
+  private String categoryName;
   private List<ProductImage> images;
   private List<ProductColor> colors;
   private LocalDateTime createdDate;
