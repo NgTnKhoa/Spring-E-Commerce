@@ -33,6 +33,12 @@ public class Product extends Base {
   @Column(name = "price")
   private double price;
 
+  @Column(name = "stock")
+  private int stock;
+
+  @Column(name = "rating")
+  private int rating;
+
   @Column(name = "discount")
   private double discount;
 

@@ -26,9 +26,9 @@ public class UserService implements IUserService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
     Page<User> users = userRepository.findAll(pageable);
     return users
-        .map(user -> userMapper
-            .toUserResponse(userMapper
-                .toUserDTO(user)));
+            .map(user -> userMapper
+                    .toUserResponse(userMapper
+                            .toUserDTO(user)));
   }
 
   @Override
@@ -36,9 +36,9 @@ public class UserService implements IUserService {
     User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
     userMapper.toUserEntity(userRequest, user);
     return userMapper
-        .toUserResponse(userMapper
-            .toUserDTO(userRepository
-                .save(user)));
+            .toUserResponse(userMapper
+                    .toUserDTO(userRepository
+                            .save(user)));
   }
 
   @Override
@@ -53,8 +53,16 @@ public class UserService implements IUserService {
   @Override
   public UserResponse findById(Long id) {
     return userMapper
-        .toUserResponse(userMapper
-            .toUserDTO(userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"))));
+            .toUserResponse(userMapper
+                    .toUserDTO(userRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("User not found"))));
+  }
+
+  @Override
+  public UserResponse findByUsername(String username) {
+    return userMapper
+            .toUserResponse(userMapper
+                    .toUserDTO(userRepository.findByUsername(username)
+                            .orElseThrow(() -> new IllegalArgumentException("User not found"))));
   }
 }

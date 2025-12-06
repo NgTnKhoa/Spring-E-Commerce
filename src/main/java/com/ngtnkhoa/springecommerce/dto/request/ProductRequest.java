@@ -21,8 +21,16 @@ public class ProductRequest {
   @NotBlank(message = "Description is required")
   private String description;
 
+  @NotNull(message = "Price is required")
   @Positive(message = "Amount must be greater than 0")
   private double price;
+
+  @NotNull(message = "Stock is required")
+  private int stock;
+
+  @Min(value = 1, message = "Rating must be at least 1")
+  @Max(value = 5, message = "Rating must be not exceed 5")
+  private int rating;
 
   private double discount;
 

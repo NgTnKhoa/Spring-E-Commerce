@@ -69,17 +69,30 @@ public class UserController {
             .build());
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
-    UserResponse user = userService.findById(id);
+//  @GetMapping("/{id}")
+//  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
+//    UserResponse user = userService.findById(id);
+//    return ResponseEntity
+//        .ok()
+//        .body(BaseResponse.builder()
+//            .message("Get user successfully")
+//            .status(true)
+//            .data(user)
+//            .statusCode(HttpStatus.OK.value())
+//            .build());
+//  }
+
+  @GetMapping("/{username}")
+  public ResponseEntity<BaseResponse> findByUsername(@PathVariable String username) {
+    UserResponse user = userService.findByUsername(username);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get user successfully")
-            .status(true)
-            .data(user)
-            .statusCode(HttpStatus.OK.value())
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get user successfully")
+                    .status(true)
+                    .data(user)
+                    .statusCode(HttpStatus.OK.value())
+                    .build());
   }
 
   @GetMapping("/{id}/orders")
