@@ -36,7 +36,6 @@ public class Category extends Base {
   @Column(name = "status")
   private String status;
 
-  @OneToMany(mappedBy = "category")
-  @Cascade(CascadeType.ALL)
+  @ManyToMany(mappedBy = "categories")
   private List<Product> products;
 }

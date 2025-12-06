@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 public class ProductRequest {
 
-  @NotNull(message = "Category ID is required")
-  private Long categoryId;
+  @NotEmpty(message = "At least one category is required")
+  private List<Long> categoryIds;
 
   @NotBlank(message = "Name is required")
   private String name;

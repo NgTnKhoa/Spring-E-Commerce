@@ -65,8 +65,12 @@ public class ProductService implements IProductService {
     }
 
     Product product = productMapper.toProductEntity(productRequest);
-    product.setCategory(categoryRepository.findById(productRequest.getCategoryId())
-            .orElseThrow(() -> new IllegalArgumentException("Category not found")));
+    
+    List<Category> categories = productRequest.getCategoryIds().stream()
+            .map(categoryId -> categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
+            .toList();
+    product.setCategories(categories);
 
     return productMapper
             .toProductResponse(productMapper
@@ -77,11 +81,18 @@ public class ProductService implements IProductService {
   @Override
   public ProductResponse update(Long id, ProductRequest productRequest) {
     Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    productMapper.toProductEntity(productRequest, product);
+    
+    List<Category> categories = productRequest.getCategoryIds().stream()
+            .map(categoryId -> categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
+            .toList();
+    product.setCategories(categories);
+    
     return productMapper
             .toProductResponse(productMapper
                     .toProductDTO(productRepository
-                            .save(productMapper
-                                    .toProductEntity(productRequest, product))));
+                            .save(product)));
   }
 
   @Override
