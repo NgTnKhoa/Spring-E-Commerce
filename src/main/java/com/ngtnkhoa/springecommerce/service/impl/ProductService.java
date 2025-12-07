@@ -9,8 +9,10 @@ import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import com.ngtnkhoa.springecommerce.repository.CategoryRepository;
 import com.ngtnkhoa.springecommerce.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -69,7 +71,7 @@ public class ProductService implements IProductService {
     List<Category> categories = productRequest.getCategoryIds().stream()
             .map(categoryId -> categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
-            .toList();
+            .collect(Collectors.toCollection(ArrayList::new));
     product.setCategories(categories);
 
     return productMapper
@@ -86,7 +88,7 @@ public class ProductService implements IProductService {
     List<Category> categories = productRequest.getCategoryIds().stream()
             .map(categoryId -> categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
-            .toList();
+            .collect(Collectors.toCollection(ArrayList::new));
     product.setCategories(categories);
     
     return productMapper
