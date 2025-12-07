@@ -11,13 +11,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", imports = SlugUtil.class)
+@Mapper(componentModel = "spring", imports = SlugUtil.class, uses = {CategoryMapper.class})
 public interface ProductMapper {
 
   @Mapping(source = "categories", target = "categories")
   @Mapping(source = "colors", target = "colors")
   ProductDTO toProductDTO(Product product);
 
+  @Mapping(source = "categories", target = "categories")
   ProductResponse toProductResponse(ProductDTO productDTO);
 
   @Mapping(source = "colors", target = "colors")

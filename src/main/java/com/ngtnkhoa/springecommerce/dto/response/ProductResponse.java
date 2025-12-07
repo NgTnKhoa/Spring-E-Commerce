@@ -21,8 +21,7 @@ public class ProductResponse {
   private String status;
   private boolean featured;
   private String mainImage;
-  private Long categoryId;
-  private String categoryName;
+  private List<CategoryResponse> categories;
   private List<ProductImage> images;
   private List<ProductColor> colors;
   private LocalDateTime createdDate;

@@ -28,9 +28,9 @@ public class ProductRequest {
   @NotNull(message = "Stock is required")
   private int stock;
 
-  @Min(value = 1, message = "Rating must be at least 1")
+  @Min(value = 0, message = "Rating must be at least 0")
   @Max(value = 5, message = "Rating must be not exceed 5")
-  private int rating;
+  private int rating = 0;
 
   private double discount;
 

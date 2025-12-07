@@ -36,8 +36,8 @@ public class Product extends Base {
   @Column(name = "stock")
   private int stock;
 
-  @Column(name = "rating")
-  private int rating;
+  @Column(name = "rating", columnDefinition = "int default 0")
+  private int rating = 0;
 
   @Column(name = "discount")
   private double discount;
