@@ -1,19 +1,13 @@
 package com.ngtnkhoa.springecommerce.service.impl;
 
-import com.ngtnkhoa.springecommerce.dto.ProductDTO;
+import com.ngtnkhoa.springecommerce.dto.request.ProductRequest;
+import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import com.ngtnkhoa.springecommerce.entity.Category;
 import com.ngtnkhoa.springecommerce.entity.Product;
 import com.ngtnkhoa.springecommerce.mapper.ProductMapper;
-import com.ngtnkhoa.springecommerce.dto.request.ProductRequest;
-import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import com.ngtnkhoa.springecommerce.repository.CategoryRepository;
 import com.ngtnkhoa.springecommerce.repository.ProductRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.ngtnkhoa.springecommerce.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ngtnkhoa.springecommerce.service.IProductService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +64,7 @@ public class ProductService implements IProductService {
     }
 
     Product product = productMapper.toProductEntity(productRequest);
-    
+
     List<Category> categories = productRequest.getCategoryIds().stream()
             .map(categoryId -> categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
@@ -84,13 +81,13 @@ public class ProductService implements IProductService {
   public ProductResponse update(Long id, ProductRequest productRequest) {
     Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
     productMapper.toProductEntity(productRequest, product);
-    
+
     List<Category> categories = productRequest.getCategoryIds().stream()
             .map(categoryId -> categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
             .collect(Collectors.toCollection(ArrayList::new));
     product.setCategories(categories);
-    
+
     return productMapper
             .toProductResponse(productMapper
                     .toProductDTO(productRepository
@@ -99,11 +96,10 @@ public class ProductService implements IProductService {
 
   @Override
   public void delete(Long id) {
-    if (productRepository.existsById(id)) {
-      productRepository.deleteById(id);
-    } else {
+    if (!productRepository.existsById(id)) {
       throw new IllegalArgumentException("Product not found");
     }
+    productRepository.deleteById(id);
   }
 
   @Override
@@ -116,13 +112,10 @@ public class ProductService implements IProductService {
 
   @Override
   public ProductResponse findBySlug(String slug) {
-    if (!productRepository.existsBySlug(slug)) {
-      throw new IllegalArgumentException("Product not found");
-    }
-
     return productMapper
             .toProductResponse(productMapper
-                    .toProductDTO(productRepository.findBySlug(slug)));
+                    .toProductDTO(productRepository.findBySlug(slug)
+                            .orElseThrow(() -> new IllegalArgumentException("Product not found"))));
   }
 
   @Override

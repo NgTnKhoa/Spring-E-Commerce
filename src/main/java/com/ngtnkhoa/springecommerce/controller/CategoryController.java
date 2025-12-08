@@ -81,20 +81,20 @@ public class CategoryController {
             .build());
   }
 
-//  @GetMapping("/{id}")
-//  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
-//    CategoryResponse category = categoryService.findById(id);
-//    return ResponseEntity
-//        .ok()
-//        .body(BaseResponse.builder()
-//            .message("Get category successfully")
-//            .status(true)
-//            .statusCode(HttpStatus.OK.value())
-//            .data(category)
-//            .build());
-//  }
+  @GetMapping("/{id}")
+  public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
+    CategoryResponse category = categoryService.findById(id);
+    return ResponseEntity
+        .ok()
+        .body(BaseResponse.builder()
+            .message("Get category successfully")
+            .status(true)
+            .statusCode(HttpStatus.OK.value())
+            .data(category)
+            .build());
+  }
 
-  @GetMapping("/{slug}")
+  @GetMapping("/slug/{slug}")
   public ResponseEntity<BaseResponse> findBySlug(@PathVariable String slug) {
     CategoryResponse category = categoryService.findBySlug(slug);
     return ResponseEntity

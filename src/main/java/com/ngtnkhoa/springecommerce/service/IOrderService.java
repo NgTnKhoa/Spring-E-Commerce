@@ -5,12 +5,16 @@ import com.ngtnkhoa.springecommerce.dto.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 public interface IOrderService {
 
   @Transactional(readOnly = true)
-  List<OrderResponse> findAll();
+  Page<OrderResponse> findAll(
+          String orderCode,
+          String status,
+          String paymentMethod,
+          int page,
+          int size
+  );
 
   @Transactional
   OrderResponse create(OrderRequest orderRequest);
@@ -22,6 +26,8 @@ public interface IOrderService {
   void delete(Long id);
 
   OrderResponse findById(Long id);
+
+  OrderResponse findByOrderCode(String orderCode);
 
   Page<OrderResponse> findByUserId(Long userId, int page, int size);
 }

@@ -8,13 +8,13 @@ import com.ngtnkhoa.springecommerce.entity.Category;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
   boolean existsByName(String name);
 
-  boolean existsBySlug(String slug);
-
-  Category findBySlug(String slug);
+  Optional<Category> findBySlug(String slug);
 
   @Query("""
           SELECT c FROM Category c

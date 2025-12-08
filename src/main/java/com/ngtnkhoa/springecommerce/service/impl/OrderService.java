@@ -1,25 +1,24 @@
 package com.ngtnkhoa.springecommerce.service.impl;
 
+import com.ngtnkhoa.springecommerce.dto.request.OrderRequest;
+import com.ngtnkhoa.springecommerce.dto.response.OrderResponse;
 import com.ngtnkhoa.springecommerce.entity.Order;
 import com.ngtnkhoa.springecommerce.entity.OrderItem;
 import com.ngtnkhoa.springecommerce.mapper.OrderItemMapper;
 import com.ngtnkhoa.springecommerce.mapper.OrderMapper;
-import com.ngtnkhoa.springecommerce.dto.request.OrderRequest;
-import com.ngtnkhoa.springecommerce.dto.response.OrderResponse;
 import com.ngtnkhoa.springecommerce.repository.OrderItemRepository;
 import com.ngtnkhoa.springecommerce.repository.OrderRepository;
 import com.ngtnkhoa.springecommerce.service.IOrderService;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +30,24 @@ public class OrderService implements IOrderService {
   private final OrderItemRepository orderItemRepository;
 
   @Override
-  public List<OrderResponse> findAll() {
-    return orderRepository.findAll()
-        .stream().map(order -> orderMapper
-            .toOrderResponse(orderMapper
-                .toOrderDTO(order))).toList();
+  public Page<OrderResponse> findAll(
+          String orderCode,
+          String status,
+          String paymentMethod,
+          int page,
+          int size
+  ) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+    Page<Order> orders = orderRepository.filter(
+            orderCode,
+            status,
+            paymentMethod,
+            pageable
+    );
+    return orders
+            .map(order -> orderMapper
+                    .toOrderResponse(orderMapper
+                            .toOrderDTO(order)));
   }
 
   @Override
@@ -45,28 +57,28 @@ public class OrderService implements IOrderService {
     orderRepository.save(order);
 
     List<OrderItem> orderItems = orderRequest.getOrderItems().stream()
-        .map(itemReq -> {
-          OrderItem item = orderItemMapper.toOrderItemEntity(itemReq);
-          item.setOrder(order);
-          return item;
-        }).toList();
+            .map(itemReq -> {
+              OrderItem item = orderItemMapper.toOrderItemEntity(itemReq);
+              item.setOrder(order);
+              return item;
+            }).toList();
 
     order.setOrderItems(orderItems);
     orderItemRepository.saveAll(orderItems);
 
     return orderMapper
-        .toOrderResponse(orderMapper
-            .toOrderDTO(orderRepository
-                .save(order)));
+            .toOrderResponse(orderMapper
+                    .toOrderDTO(orderRepository
+                            .save(order)));
   }
 
   @Override
   public OrderResponse update(Long id, OrderRequest orderRequest) {
     Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found"));
     return orderMapper.toOrderResponse(orderMapper
-        .toOrderDTO(orderRepository
-            .save(orderMapper
-                .toOrderEntity(orderRequest, order))));
+            .toOrderDTO(orderRepository
+                    .save(orderMapper
+                            .toOrderEntity(orderRequest, order))));
   }
 
   @Override
@@ -81,9 +93,17 @@ public class OrderService implements IOrderService {
   @Override
   public OrderResponse findById(Long id) {
     return orderMapper
-        .toOrderResponse(orderMapper
-            .toOrderDTO(orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"))));
+            .toOrderResponse(orderMapper
+                    .toOrderDTO(orderRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Order not found"))));
+  }
+
+  @Override
+  public OrderResponse findByOrderCode(String orderCode) {
+    return orderMapper
+            .toOrderResponse(orderMapper
+                    .toOrderDTO(orderRepository.findByOrderCode(orderCode)
+                            .orElseThrow(() -> new IllegalArgumentException("Order not found"))));
   }
 
   @Override
@@ -91,9 +111,9 @@ public class OrderService implements IOrderService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
     Page<Order> orders = orderRepository.findAllByUser_Id(userId, pageable);
     return orders
-        .map(order -> orderMapper
-            .toOrderResponse(orderMapper
-                .toOrderDTO(order)));
+            .map(order -> orderMapper
+                    .toOrderResponse(orderMapper
+                            .toOrderDTO(order)));
   }
 
   private String generateOrderCode() {

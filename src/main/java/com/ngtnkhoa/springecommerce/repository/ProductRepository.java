@@ -1,6 +1,7 @@
 package com.ngtnkhoa.springecommerce.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -15,12 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
   boolean existsByName(String name);
 
-  @Query("SELECT DISTINCT p FROM Product p JOIN p.categories c WHERE c.id = :categoryId")
-  Page<Product> findAllByCategory_Id(@Param("categoryId") Long categoryId, Pageable pageable);
-
-  Product findBySlug(String slug);
-
-  boolean existsBySlug(String slug);
+  Optional<Product> findBySlug(String slug);
 
   @Query("SELECT DISTINCT color FROM Product p JOIN p.categories cat JOIN p.colors color WHERE cat.id = :categoryId")
   Set<String> findColorsByCategoryId(@Param("categoryId") Long categoryId);
