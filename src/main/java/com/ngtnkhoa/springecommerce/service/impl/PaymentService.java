@@ -4,18 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ngtnkhoa.springecommerce.dto.request.CreatePaymentLinkRequestBody;
-import com.ngtnkhoa.springecommerce.entity.Payment;
-import com.ngtnkhoa.springecommerce.mapper.PaymentMapper;
 import com.ngtnkhoa.springecommerce.dto.request.PaymentRequest;
 import com.ngtnkhoa.springecommerce.dto.response.PaymentResponse;
+import com.ngtnkhoa.springecommerce.entity.Payment;
+import com.ngtnkhoa.springecommerce.mapper.PaymentMapper;
 import com.ngtnkhoa.springecommerce.repository.OrderRepository;
 import com.ngtnkhoa.springecommerce.repository.PaymentRepository;
 import com.ngtnkhoa.springecommerce.service.IPaymentService;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +21,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.payos.PayOS;
 import vn.payos.type.*;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,20 +38,20 @@ public class PaymentService implements IPaymentService {
   @Override
   public List<PaymentResponse> findAll() {
     return paymentRepository.findAll()
-        .stream()
-        .map(payment -> paymentMapper
-            .toPaymentResponse(paymentMapper
-                .toPaymentDTO(payment))).toList();
+            .stream()
+            .map(payment -> paymentMapper
+                    .toPaymentResponse(paymentMapper
+                            .toPaymentDTO(payment))).toList();
   }
 
   @Override
   public PaymentResponse create(PaymentRequest paymentRequest) {
     if (orderRepository.existsById(paymentRequest.getOrderId())) {
       return paymentMapper
-          .toPaymentResponse(paymentMapper
-              .toPaymentDTO(paymentRepository
-                  .save(paymentMapper
-                      .toPaymentEntity(paymentRequest))));
+              .toPaymentResponse(paymentMapper
+                      .toPaymentDTO(paymentRepository
+                              .save(paymentMapper
+                                      .toPaymentEntity(paymentRequest))));
     } else {
       throw new IllegalArgumentException("Order not found");
     }
@@ -62,27 +61,34 @@ public class PaymentService implements IPaymentService {
   public PaymentResponse update(Long id, PaymentRequest paymentRequest) {
     Payment payment = paymentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Payment not found"));
     return paymentMapper
-        .toPaymentResponse(paymentMapper
-            .toPaymentDTO(paymentRepository
-                .save(paymentMapper
-                    .toPaymentEntity(paymentRequest, payment))));
+            .toPaymentResponse(paymentMapper
+                    .toPaymentDTO(paymentRepository
+                            .save(paymentMapper
+                                    .toPaymentEntity(paymentRequest, payment))));
   }
 
   @Override
   public void delete(Long id) {
-    if (paymentRepository.existsById(id)) {
-      paymentRepository.deleteById(id);
-    } else {
+    if (!paymentRepository.existsById(id)) {
       throw new IllegalArgumentException("Payment not found");
     }
+    paymentRepository.deleteById(id);
   }
 
   @Override
   public PaymentResponse findById(Long id) {
     return paymentMapper
-        .toPaymentResponse(paymentMapper
-            .toPaymentDTO(paymentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Payment not found"))));
+            .toPaymentResponse(paymentMapper
+                    .toPaymentDTO(paymentRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Payment not found"))));
+  }
+
+  @Override
+  public PaymentResponse findByTransactionCode(String transactionCode) {
+    return paymentMapper
+            .toPaymentResponse(paymentMapper
+                    .toPaymentDTO(paymentRepository.findByTransactionCode(transactionCode)
+                            .orElseThrow(() -> new IllegalArgumentException("Payment not found"))));
   }
 
   @Override
@@ -90,9 +96,9 @@ public class PaymentService implements IPaymentService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
     Page<Payment> payments = paymentRepository.findAllByUser_Id(userId, pageable);
     return payments
-        .map(payment -> paymentMapper
-            .toPaymentResponse(paymentMapper
-                .toPaymentDTO(payment)));
+            .map(payment -> paymentMapper
+                    .toPaymentResponse(paymentMapper
+                            .toPaymentDTO(payment)));
   }
 
   //  order
@@ -114,7 +120,7 @@ public class PaymentService implements IPaymentService {
       ItemData item = ItemData.builder().name(productName).price(price).quantity(1).build();
 
       PaymentData paymentData = PaymentData.builder().orderCode(orderCode).description(description).amount(price)
-          .item(item).returnUrl(returnUrl).cancelUrl(cancelUrl).build();
+              .item(item).returnUrl(returnUrl).cancelUrl(cancelUrl).build();
 
       CheckoutResponseData data = payOS.createPaymentLink(paymentData);
 
@@ -234,7 +240,7 @@ public class PaymentService implements IPaymentService {
       long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
       ItemData item = ItemData.builder().name(productName).quantity(1).price(price).build();
       PaymentData paymentData = PaymentData.builder().orderCode(orderCode).amount(price).description(description)
-          .returnUrl(returnUrl).cancelUrl(cancelUrl).item(item).build();
+              .returnUrl(returnUrl).cancelUrl(cancelUrl).item(item).build();
       CheckoutResponseData data = payOS.createPaymentLink(paymentData);
 
       String checkoutUrl = data.getCheckoutUrl();

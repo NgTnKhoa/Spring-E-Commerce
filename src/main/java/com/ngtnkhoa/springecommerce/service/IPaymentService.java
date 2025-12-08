@@ -29,6 +29,8 @@ public interface IPaymentService {
 
   PaymentResponse findById(Long id);
 
+  PaymentResponse findByTransactionCode(String transactionCode);
+
   Page<PaymentResponse> findByUserId(Long userId, int page, int size);
 
   //  order

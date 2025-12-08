@@ -94,6 +94,18 @@ public class PaymentController {
             .build());
   }
 
+  @GetMapping("/transaction/{transactionCode}")
+  public ResponseEntity<BaseResponse> findByTransactionCode(@PathVariable String transactionCode) {
+    PaymentResponse payment = paymentService.findByTransactionCode(transactionCode);
+    return ResponseEntity.ok()
+            .body(BaseResponse.builder()
+                    .message("Get payment successfully")
+                    .status(true)
+                    .statusCode(HttpStatus.OK.value())
+                    .data(payment)
+                    .build());
+  }
+
   //  order
 
   @PostMapping(path = "/create")
