@@ -21,8 +21,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
           """)
   Page<Order> filter(
           @Param("orderCode") String orderCode,
-          @Param("categoryId") String status,
-          @Param("colors") String paymentMethod,
+          @Param("status") String status,
+          @Param("paymentMethod") String paymentMethod,
           Pageable pageable
   );
 

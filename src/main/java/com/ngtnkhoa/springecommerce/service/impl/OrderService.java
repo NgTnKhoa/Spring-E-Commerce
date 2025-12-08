@@ -37,7 +37,7 @@ public class OrderService implements IOrderService {
           int page,
           int size
   ) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").ascending());
     Page<Order> orders = orderRepository.filter(
             orderCode,
             status,
@@ -108,7 +108,7 @@ public class OrderService implements IOrderService {
 
   @Override
   public Page<OrderResponse> findByUserId(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
     Page<Order> orders = orderRepository.findAllByUser_Id(userId, pageable);
     return orders
             .map(order -> orderMapper

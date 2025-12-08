@@ -23,7 +23,7 @@ public class UserService implements IUserService {
 
   @Override
   public Page<UserResponse> findAll(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
     Page<User> users = userRepository.findAll(pageable);
     return users
             .map(user -> userMapper

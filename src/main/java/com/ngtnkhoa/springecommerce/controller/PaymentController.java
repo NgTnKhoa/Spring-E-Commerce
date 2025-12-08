@@ -1,7 +1,6 @@
 package com.ngtnkhoa.springecommerce.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ngtnkhoa.springecommerce.dto.request.CreatePaymentLinkRequestBody;
 import com.ngtnkhoa.springecommerce.dto.request.PaymentRequest;
@@ -9,14 +8,13 @@ import com.ngtnkhoa.springecommerce.dto.response.BaseResponse;
 import com.ngtnkhoa.springecommerce.dto.response.PaymentResponse;
 import com.ngtnkhoa.springecommerce.service.IPaymentService;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +29,18 @@ public class PaymentController {
   private final IPaymentService paymentService;
 
   @GetMapping
-  public ResponseEntity<BaseResponse> findAll() {
-    List<PaymentResponse> payments = paymentService.findAll();
+  public ResponseEntity<BaseResponse> findAll(
+          @RequestParam(required = false) String status,
+          @RequestParam(required = false) String method,
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size
+  ) {
+    Page<PaymentResponse> payments = paymentService.findAll(
+            status,
+            method,
+            page,
+            size
+    );
     return ResponseEntity
         .ok()
         .body(BaseResponse.builder()

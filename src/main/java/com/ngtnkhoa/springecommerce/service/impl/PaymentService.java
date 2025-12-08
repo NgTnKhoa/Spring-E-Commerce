@@ -36,12 +36,22 @@ public class PaymentService implements IPaymentService {
   private final PayOS payOS;
 
   @Override
-  public List<PaymentResponse> findAll() {
-    return paymentRepository.findAll()
-            .stream()
+  public Page<PaymentResponse> findAll(
+          String status,
+          String method,
+          int page,
+          int size
+  ) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+    Page<Payment> payments = paymentRepository.filter(
+            status,
+            method,
+            pageable
+    );
+    return payments
             .map(payment -> paymentMapper
                     .toPaymentResponse(paymentMapper
-                            .toPaymentDTO(payment))).toList();
+                            .toPaymentDTO(payment)));
   }
 
   @Override
@@ -93,7 +103,7 @@ public class PaymentService implements IPaymentService {
 
   @Override
   public Page<PaymentResponse> findByUserId(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
     Page<Payment> payments = paymentRepository.findAllByUser_Id(userId, pageable);
     return payments
             .map(payment -> paymentMapper

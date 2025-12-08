@@ -70,7 +70,7 @@ public class ReviewService implements IReviewService {
 
   @Override
   public Page<ReviewResponse> findByUserId(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
     Page<Review> reviews = reviewRepository.findAllByUser_Id(userId, pageable);
     return reviews
         .map(review -> reviewMapper

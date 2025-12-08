@@ -22,7 +22,7 @@ public class CategoryService implements ICategoryService {
 
   @Override
   public Page<CategoryResponse> findAll(Boolean featured, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
     Page<Category> categories = categoryRepository.filter(featured, pageable);
     return categories
             .map(category -> categoryMapper

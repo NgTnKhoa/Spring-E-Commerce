@@ -16,7 +16,12 @@ import java.util.Map;
 public interface IPaymentService {
 
   @Transactional(readOnly = true)
-  List<PaymentResponse> findAll();
+  Page<PaymentResponse> findAll(
+          String status,
+          String method,
+          int page,
+          int size
+  );
 
   @Transactional
   PaymentResponse create(PaymentRequest paymentRequest);

@@ -40,7 +40,7 @@ public class ProductService implements IProductService {
           int page,
           int size
   ) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
     Page<Product> products = productRepository.filter(
             featured,
             categoryId,
