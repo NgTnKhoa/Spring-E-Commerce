@@ -72,11 +72,7 @@ public class Product extends Base {
   @Cascade(CascadeType.ALL)
   private List<OrderItem> orderItems;
 
-  @ManyToMany
-  @JoinTable(
-    name = "product_categories",
-    joinColumns = @JoinColumn(name = "product_id"),
-    inverseJoinColumns = @JoinColumn(name = "category_id")
-  )
-  private List<Category> categories;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id")
+  private Category category;
 }

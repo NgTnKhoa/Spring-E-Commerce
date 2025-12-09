@@ -25,4 +25,6 @@ public class CategoryRequest {
 
   @NotBlank(message = "Status is required")
   private String status;
+
+  private Long parentId;
 }

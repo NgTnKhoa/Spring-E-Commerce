@@ -65,11 +65,9 @@ public class ProductService implements IProductService {
 
     Product product = productMapper.toProductEntity(productRequest);
 
-    List<Category> categories = productRequest.getCategoryIds().stream()
-            .map(categoryId -> categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
-            .collect(Collectors.toCollection(ArrayList::new));
-    product.setCategories(categories);
+    Category category = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + productRequest.getCategoryId()));
+    product.setCategory(category);
 
     return productMapper
             .toProductResponse(productMapper
@@ -82,11 +80,9 @@ public class ProductService implements IProductService {
     Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
     productMapper.toProductEntity(productRequest, product);
 
-    List<Category> categories = productRequest.getCategoryIds().stream()
-            .map(categoryId -> categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId)))
-            .collect(Collectors.toCollection(ArrayList::new));
-    product.setCategories(categories);
+    Category category = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + productRequest.getCategoryId()));
+    product.setCategory(category);
 
     return productMapper
             .toProductResponse(productMapper

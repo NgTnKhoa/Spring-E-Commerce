@@ -18,14 +18,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
   Optional<Product> findBySlug(String slug);
 
-  @Query("SELECT DISTINCT color FROM Product p JOIN p.categories cat JOIN p.colors color WHERE cat.id = :categoryId")
+  @Query("SELECT DISTINCT color FROM Product p JOIN p.colors color WHERE p.category.id = :categoryId")
   Set<String> findColorsByCategoryId(@Param("categoryId") Long categoryId);
 
   @Query("""
     SELECT DISTINCT p FROM Product p
-    LEFT JOIN p.categories cat
     WHERE (:featured IS NULL OR p.featured = :featured)
-      AND (:categoryId IS NULL OR cat.id = :categoryId)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
       AND (:colors IS NULL OR EXISTS (SELECT c FROM p.colors c WHERE c IN :colors))
       AND (:brands IS NULL OR p.brand IN :brands)
       AND (:minPrice IS NULL OR p.price >= :minPrice)

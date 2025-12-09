@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,6 +36,13 @@ public class Category extends Base {
   @Column(name = "status")
   private String status;
 
-  @ManyToMany(mappedBy = "categories")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id")
+  private Category parent;
+
+  @OneToMany(mappedBy = "parent", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+  private List<Category> children;
+
+  @OneToMany(mappedBy = "category")
   private List<Product> products;
 }

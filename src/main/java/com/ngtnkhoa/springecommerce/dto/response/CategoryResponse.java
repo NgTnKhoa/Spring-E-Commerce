@@ -13,6 +13,9 @@ public class CategoryResponse {
   private String image;
   private boolean featured;
   private String status;
+  private Long parentId;
+  private String parentName;
+  private Integer level;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }

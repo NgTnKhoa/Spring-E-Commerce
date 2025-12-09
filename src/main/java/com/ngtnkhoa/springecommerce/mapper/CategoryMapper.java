@@ -14,13 +14,30 @@ import com.ngtnkhoa.springecommerce.util.SlugUtil;
 @Mapper(componentModel = "spring", imports = SlugUtil.class)
 public interface CategoryMapper {
 
+  @Mapping(target = "parentId", expression = "java(category.getParent() != null ? category.getParent().getId() : null)")
+  @Mapping(target = "parentName", expression = "java(category.getParent() != null ? category.getParent().getName() : null)")
+  @Mapping(target = "level", expression = "java(calculateLevel(category))")
   CategoryDTO toCategoryDTO(Category category);
 
   CategoryResponse toCategoryResponse(CategoryDTO categoryDTO);
 
   @Mapping(target = "slug", expression = "java(SlugUtil.toSlug(categoryRequest.getName()))")
+  @Mapping(target = "parent", ignore = true)
+  @Mapping(target = "children", ignore = true)
   Category toCategoryEntity(CategoryRequest categoryRequest);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  @Mapping(target = "parent", ignore = true)
+  @Mapping(target = "children", ignore = true)
   Category toCategoryEntity(CategoryRequest categoryRequest, @MappingTarget Category category);
+
+  default Integer calculateLevel(Category category) {
+    int level = 0;
+    Category current = category;
+    while (current.getParent() != null) {
+      level++;
+      current = current.getParent();
+    }
+    return level;
+  }
 }

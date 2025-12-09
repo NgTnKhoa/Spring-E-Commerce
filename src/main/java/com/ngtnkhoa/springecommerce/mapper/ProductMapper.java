@@ -14,18 +14,19 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring", imports = SlugUtil.class, uses = {CategoryMapper.class})
 public interface ProductMapper {
 
-  @Mapping(source = "categories", target = "categories")
+  @Mapping(source = "category", target = "category")
   @Mapping(source = "colors", target = "colors")
   ProductDTO toProductDTO(Product product);
 
-  @Mapping(source = "categories", target = "categories")
+  @Mapping(source = "category", target = "category")
   ProductResponse toProductResponse(ProductDTO productDTO);
 
   @Mapping(source = "colors", target = "colors")
   @Mapping(target = "slug", expression = "java(SlugUtil.toSlug(productRequest.getName()))")
+  @Mapping(target = "category", ignore = true)
   Product toProductEntity(ProductRequest productRequest);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  @Mapping(target = "categories", ignore = true)
+  @Mapping(target = "category", ignore = true)
   Product toProductEntity(ProductRequest productRequest, @MappingTarget Product product);
 }

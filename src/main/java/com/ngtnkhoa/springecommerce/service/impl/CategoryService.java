@@ -34,23 +34,40 @@ public class CategoryService implements ICategoryService {
   public CategoryResponse create(CategoryRequest categoryRequest) {
     if (categoryRepository.existsByName(categoryRequest.getName())) {
       throw new IllegalArgumentException("Category name already exists");
-    } else {
-      return categoryMapper
-              .toCategoryResponse(categoryMapper
-                      .toCategoryDTO(categoryRepository
-                              .save(categoryMapper
-                                      .toCategoryEntity(categoryRequest))));
     }
+    
+    Category category = categoryMapper.toCategoryEntity(categoryRequest);
+    
+    if (categoryRequest.getParentId() != null) {
+      Category parent = categoryRepository.findById(categoryRequest.getParentId())
+              .orElseThrow(() -> new IllegalArgumentException("Parent category not found"));
+      category.setParent(parent);
+    }
+    
+    Category savedCategory = categoryRepository.save(category);
+    return categoryMapper.toCategoryResponse(categoryMapper.toCategoryDTO(savedCategory));
   }
 
   @Override
   public CategoryResponse update(Long id, CategoryRequest categoryRequest) {
-    Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Category not found"));
-    return categoryMapper
-            .toCategoryResponse(categoryMapper
-                    .toCategoryDTO(categoryRepository
-                            .save(categoryMapper
-                                    .toCategoryEntity(categoryRequest, category))));
+    Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+    
+    categoryMapper.toCategoryEntity(categoryRequest, category);
+    
+    if (categoryRequest.getParentId() != null) {
+      if (categoryRequest.getParentId().equals(id)) {
+        throw new IllegalArgumentException("Category cannot be its own parent");
+      }
+      Category parent = categoryRepository.findById(categoryRequest.getParentId())
+              .orElseThrow(() -> new IllegalArgumentException("Parent category not found"));
+      category.setParent(parent);
+    } else {
+      category.setParent(null);
+    }
+    
+    Category savedCategory = categoryRepository.save(category);
+    return categoryMapper.toCategoryResponse(categoryMapper.toCategoryDTO(savedCategory));
   }
 
   @Override
@@ -75,5 +92,21 @@ public class CategoryService implements ICategoryService {
             .toCategoryResponse(categoryMapper
                     .toCategoryDTO(categoryRepository.findBySlug(slug)
                             .orElseThrow(() -> new IllegalArgumentException("Category not found"))));
+  }
+
+  @Override
+  public Page<CategoryResponse> findRootCategories(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+    Page<Category> categories = categoryRepository.findRootCategories(pageable);
+    return categories.map(category -> categoryMapper
+            .toCategoryResponse(categoryMapper.toCategoryDTO(category)));
+  }
+
+  @Override
+  public Page<CategoryResponse> findByParentId(Long parentId, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+    Page<Category> categories = categoryRepository.findByParentId(parentId, pageable);
+    return categories.map(category -> categoryMapper
+            .toCategoryResponse(categoryMapper.toCategoryDTO(category)));
   }
 }
