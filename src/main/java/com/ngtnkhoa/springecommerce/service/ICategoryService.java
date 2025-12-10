@@ -23,9 +23,5 @@ public interface ICategoryService {
 
   CategoryResponse findBySlug(String slug);
 
-  @Transactional(readOnly = true)
-  Page<CategoryResponse> findRootCategories(int page, int size);
 
-  @Transactional(readOnly = true)
-  Page<CategoryResponse> findByParentId(Long parentId, int page, int size);
 }

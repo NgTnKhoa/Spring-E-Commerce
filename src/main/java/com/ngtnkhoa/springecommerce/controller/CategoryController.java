@@ -107,36 +107,7 @@ public class CategoryController {
             .build());
   }
 
-  @GetMapping("/root")
-  public ResponseEntity<BaseResponse> findRootCategories(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
-    Page<CategoryResponse> categories = categoryService.findRootCategories(page, size);
-    return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get root categories successfully")
-            .status(true)
-            .data(categories)
-            .statusCode(HttpStatus.OK.value())
-            .build());
-  }
 
-  @GetMapping("/parent/{parentId}")
-  public ResponseEntity<BaseResponse> findByParentId(
-      @PathVariable Long parentId,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
-    Page<CategoryResponse> categories = categoryService.findByParentId(parentId, page, size);
-    return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get subcategories successfully")
-            .status(true)
-            .data(categories)
-            .statusCode(HttpStatus.OK.value())
-            .build());
-  }
 
   @GetMapping("/{id}/colors")
   public ResponseEntity<BaseResponse> findColors(@PathVariable Long id) {

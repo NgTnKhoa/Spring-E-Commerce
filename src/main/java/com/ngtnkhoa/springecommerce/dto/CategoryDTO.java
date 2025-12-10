@@ -15,7 +15,6 @@ public class CategoryDTO {
   private String status;
   private Long parentId;
   private String parentName;
-  private Integer level;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }

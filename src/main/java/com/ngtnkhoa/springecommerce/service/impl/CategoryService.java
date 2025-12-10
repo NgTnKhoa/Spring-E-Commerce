@@ -94,19 +94,5 @@ public class CategoryService implements ICategoryService {
                             .orElseThrow(() -> new IllegalArgumentException("Category not found"))));
   }
 
-  @Override
-  public Page<CategoryResponse> findRootCategories(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-    Page<Category> categories = categoryRepository.findRootCategories(pageable);
-    return categories.map(category -> categoryMapper
-            .toCategoryResponse(categoryMapper.toCategoryDTO(category)));
-  }
 
-  @Override
-  public Page<CategoryResponse> findByParentId(Long parentId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-    Page<Category> categories = categoryRepository.findByParentId(parentId, pageable);
-    return categories.map(category -> categoryMapper
-            .toCategoryResponse(categoryMapper.toCategoryDTO(category)));
-  }
 }

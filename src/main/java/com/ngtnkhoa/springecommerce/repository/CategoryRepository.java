@@ -25,15 +25,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
       Pageable pageable
   );
 
-  @Query("""
-          SELECT c FROM Category c
-          WHERE c.parent IS NULL
-      """)
-  Page<Category> findRootCategories(Pageable pageable);
 
-  @Query("""
-          SELECT c FROM Category c
-          WHERE c.parent.id = :parentId
-      """)
-  Page<Category> findByParentId(@Param("parentId") Long parentId, Pageable pageable);
 }
