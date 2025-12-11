@@ -5,6 +5,8 @@ import com.ngtnkhoa.springecommerce.dto.response.CategoryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface ICategoryService {
 
   @Transactional(readOnly = true)
@@ -23,5 +25,7 @@ public interface ICategoryService {
 
   CategoryResponse findBySlug(String slug);
 
+  List<CategoryResponse> findCategoryTrees();
 
+  List<CategoryResponse> findCategoryBreadcrumb(Long id);
 }

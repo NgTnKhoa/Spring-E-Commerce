@@ -1,12 +1,9 @@
 package com.ngtnkhoa.springecommerce.controller;
 
+import com.ngtnkhoa.springecommerce.dto.request.CategoryRequest;
+import com.ngtnkhoa.springecommerce.dto.response.BaseResponse;
 import com.ngtnkhoa.springecommerce.dto.response.CategoryResponse;
-
-import java.util.List;
-
-import java.util.Set;
-
-import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
+import com.ngtnkhoa.springecommerce.service.ICategoryService;
 import com.ngtnkhoa.springecommerce.service.IProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ngtnkhoa.springecommerce.service.ICategoryService;
-import com.ngtnkhoa.springecommerce.dto.request.CategoryRequest;
-import com.ngtnkhoa.springecommerce.dto.response.BaseResponse;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -29,95 +25,119 @@ public class CategoryController {
 
   @GetMapping
   public ResponseEntity<BaseResponse> findAll(
-      @RequestParam(required = false) Boolean featured,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
+          @RequestParam(required = false) Boolean featured,
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size) {
     Page<CategoryResponse> categories = categoryService.findAll(featured, page, size);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get categories successfully")
-            .status(true)
-            .data(categories)
-            .statusCode(HttpStatus.OK.value())
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get categories successfully")
+                    .status(true)
+                    .data(categories)
+                    .statusCode(HttpStatus.OK.value())
+                    .build());
   }
 
   @PostMapping
   public ResponseEntity<BaseResponse> create(@Valid @RequestBody CategoryRequest categoryRequest) {
     CategoryResponse createdCategory = categoryService.create(categoryRequest);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Create category successfully")
-            .data(createdCategory)
-            .statusCode(HttpStatus.CREATED.value())
-            .status(true)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Create category successfully")
+                    .data(createdCategory)
+                    .statusCode(HttpStatus.CREATED.value())
+                    .status(true)
+                    .build());
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<BaseResponse> update(@PathVariable Long id, @Valid @RequestBody CategoryRequest categoryRequest) {
     CategoryResponse updatedCategory = categoryService.update(id, categoryRequest);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Update category successfully")
-            .data(updatedCategory)
-            .statusCode(HttpStatus.OK.value())
-            .status(true)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Update category successfully")
+                    .data(updatedCategory)
+                    .statusCode(HttpStatus.OK.value())
+                    .status(true)
+                    .build());
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
     categoryService.delete(id);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Delete category successfully")
-            .statusCode(HttpStatus.NO_CONTENT.value())
-            .status(true)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Delete category successfully")
+                    .statusCode(HttpStatus.NO_CONTENT.value())
+                    .status(true)
+                    .build());
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<BaseResponse> findById(@PathVariable Long id) {
     CategoryResponse category = categoryService.findById(id);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get category successfully")
-            .status(true)
-            .statusCode(HttpStatus.OK.value())
-            .data(category)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get category successfully")
+                    .status(true)
+                    .statusCode(HttpStatus.OK.value())
+                    .data(category)
+                    .build());
   }
 
   @GetMapping("/slug/{slug}")
   public ResponseEntity<BaseResponse> findBySlug(@PathVariable String slug) {
     CategoryResponse category = categoryService.findBySlug(slug);
     return ResponseEntity
-        .ok()
-        .body(BaseResponse.builder()
-            .message("Get category successfully")
-            .status(true)
-            .statusCode(HttpStatus.OK.value())
-            .data(category)
-            .build());
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get category successfully")
+                    .status(true)
+                    .statusCode(HttpStatus.OK.value())
+                    .data(category)
+                    .build());
   }
 
+  @GetMapping("/trees")
+  public ResponseEntity<BaseResponse> findCategoryTrees() {
+    List<CategoryResponse> categories = categoryService.findCategoryTrees();
+    return ResponseEntity
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get category trees successfully")
+                    .status(true)
+                    .data(categories)
+                    .statusCode(HttpStatus.OK.value())
+                    .build());
+  }
 
+  @GetMapping("/{id}/breadcrumbs")
+  public ResponseEntity<BaseResponse> findCategoryBreadcrumb(@PathVariable Long id) {
+    List<CategoryResponse> categories = categoryService.findCategoryBreadcrumb(id);
+    return ResponseEntity
+            .ok()
+            .body(BaseResponse.builder()
+                    .message("Get category breadcrumb successfully")
+                    .status(true)
+                    .data(categories)
+                    .statusCode(HttpStatus.OK.value())
+                    .build());
+  }
 
   @GetMapping("/{id}/colors")
   public ResponseEntity<BaseResponse> findColors(@PathVariable Long id) {
     Set<String> colors = productService.findColorsByCategoryId(id);
     return ResponseEntity.ok()
-        .body(BaseResponse.builder()
-            .message("Get all colors successfully")
-            .status(true)
-            .data(colors)
-            .statusCode(HttpStatus.OK.value())
-            .build());
+            .body(BaseResponse.builder()
+                    .message("Get all colors successfully")
+                    .status(true)
+                    .data(colors)
+                    .statusCode(HttpStatus.OK.value())
+                    .build());
   }
 }

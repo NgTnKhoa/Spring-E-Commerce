@@ -13,6 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
@@ -35,15 +39,15 @@ public class CategoryService implements ICategoryService {
     if (categoryRepository.existsByName(categoryRequest.getName())) {
       throw new IllegalArgumentException("Category name already exists");
     }
-    
+
     Category category = categoryMapper.toCategoryEntity(categoryRequest);
-    
+
     if (categoryRequest.getParentId() != null) {
       Category parent = categoryRepository.findById(categoryRequest.getParentId())
               .orElseThrow(() -> new IllegalArgumentException("Parent category not found"));
       category.setParent(parent);
     }
-    
+
     Category savedCategory = categoryRepository.save(category);
     return categoryMapper.toCategoryResponse(categoryMapper.toCategoryDTO(savedCategory));
   }
@@ -52,9 +56,9 @@ public class CategoryService implements ICategoryService {
   public CategoryResponse update(Long id, CategoryRequest categoryRequest) {
     Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-    
+
     categoryMapper.toCategoryEntity(categoryRequest, category);
-    
+
     if (categoryRequest.getParentId() != null) {
       if (categoryRequest.getParentId().equals(id)) {
         throw new IllegalArgumentException("Category cannot be its own parent");
@@ -65,7 +69,7 @@ public class CategoryService implements ICategoryService {
     } else {
       category.setParent(null);
     }
-    
+
     Category savedCategory = categoryRepository.save(category);
     return categoryMapper.toCategoryResponse(categoryMapper.toCategoryDTO(savedCategory));
   }
@@ -94,5 +98,42 @@ public class CategoryService implements ICategoryService {
                             .orElseThrow(() -> new IllegalArgumentException("Category not found"))));
   }
 
+  @Override
+  public List<CategoryResponse> findCategoryTrees() {
+    return categoryRepository
+            .findRootCategories()
+            .stream()
+            .map(this::buildCategoryTree)
+            .toList();
+  }
 
+  @Override
+  public List<CategoryResponse> findCategoryBreadcrumb(Long id) {
+    Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+    LinkedList<CategoryResponse> breadcrumb = new LinkedList<>();
+    Category current = category;
+
+    while (current != null) {
+      CategoryResponse categoryResponse = categoryMapper.toCategoryResponse(
+              categoryMapper.toCategoryDTO(current));
+      breadcrumb.addFirst(categoryResponse);
+      current = current.getParent();
+    }
+
+    return breadcrumb;
+  }
+
+  private CategoryResponse buildCategoryTree(Category category) {
+    CategoryResponse categoryResponse = categoryMapper.toCategoryResponse(
+            categoryMapper.toCategoryDTO(category));
+
+    List<CategoryResponse> children = category.getChildren().stream()
+            .map(this::buildCategoryTree)
+            .toList();
+
+    categoryResponse.setChildren(children);
+    return categoryResponse;
+  }
 }

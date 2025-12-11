@@ -8,6 +8,7 @@ import com.ngtnkhoa.springecommerce.entity.Category;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
@@ -25,5 +26,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
       Pageable pageable
   );
 
+  @Query("""
+          SELECT c FROM Category c
+          WHERE c.parent IS NULL
+          ORDER BY c.name ASC
+      """)
+  List<Category> findRootCategories();
 
 }
