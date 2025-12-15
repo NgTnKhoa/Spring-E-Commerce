@@ -10,7 +10,7 @@ import java.util.List;
 public interface ICategoryService {
 
   @Transactional(readOnly = true)
-  Page<CategoryResponse> findAll(Boolean featured, int page, int size);
+  Page<CategoryResponse> findAll(Boolean featured, String keyword, int page, int size);
 
   @Transactional
   CategoryResponse create(CategoryRequest categoryRequest);

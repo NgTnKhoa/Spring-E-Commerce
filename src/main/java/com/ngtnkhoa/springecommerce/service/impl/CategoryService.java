@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,9 +24,9 @@ public class CategoryService implements ICategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public Page<CategoryResponse> findAll(Boolean featured, int page, int size) {
+  public Page<CategoryResponse> findAll(Boolean featured, String keyword, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-    Page<Category> categories = categoryRepository.filter(featured, pageable);
+    Page<Category> categories = categoryRepository.filter(featured, keyword, pageable);
     return categories
             .map(category -> categoryMapper
                     .toCategoryResponse(categoryMapper

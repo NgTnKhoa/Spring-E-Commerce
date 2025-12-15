@@ -26,9 +26,10 @@ public class CategoryController {
   @GetMapping
   public ResponseEntity<BaseResponse> findAll(
           @RequestParam(required = false) Boolean featured,
+          @RequestParam(required = false) String keyword,
           @RequestParam(defaultValue = "0") int page,
           @RequestParam(defaultValue = "10") int size) {
-    Page<CategoryResponse> categories = categoryService.findAll(featured, page, size);
+    Page<CategoryResponse> categories = categoryService.findAll(featured, keyword, page, size);
     return ResponseEntity
             .ok()
             .body(BaseResponse.builder()
