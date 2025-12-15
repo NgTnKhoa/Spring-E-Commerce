@@ -13,7 +13,7 @@ public interface IProductService {
   @Transactional(readOnly = true)
   Page<ProductResponse> findAll(
       Boolean featured,
-      Long categoryId,
+      String categorySlug,
       List<String> colors,
       List<String> brands,
       Double minPrice,

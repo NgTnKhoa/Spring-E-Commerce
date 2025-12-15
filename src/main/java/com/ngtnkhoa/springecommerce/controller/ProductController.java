@@ -28,7 +28,7 @@ public class ProductController {
   @GetMapping
   public ResponseEntity<BaseResponse> findAll(
       @RequestParam(required = false) Boolean featured,
-      @RequestParam(required = false) Long categoryId,
+      @RequestParam(required = false) String categorySlug,
       @RequestParam(required = false) List<String> colors,
       @RequestParam(required = false) List<String> brands,
       @RequestParam(required = false) Double minPrice,
@@ -39,7 +39,7 @@ public class ProductController {
   ) {
     Page<ProductResponse> products = productService.findAll(
         featured,
-        categoryId,
+        categorySlug,
         colors,
         brands,
         minPrice,

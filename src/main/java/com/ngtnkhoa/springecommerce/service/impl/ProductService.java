@@ -15,10 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class ProductService implements IProductService {
   @Override
   public Page<ProductResponse> findAll(
           Boolean featured,
-          Long categoryId,
+          String categorySlug,
           List<String> colors,
           List<String> brands,
           Double minPrice,
@@ -40,10 +38,13 @@ public class ProductService implements IProductService {
           int page,
           int size
   ) {
+    Category category = categoryRepository.findBySlug(categorySlug)
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+
     Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
     Page<Product> products = productRepository.filter(
             featured,
-            categoryId,
+            category.getId(),
             colors,
             brands,
             minPrice,
