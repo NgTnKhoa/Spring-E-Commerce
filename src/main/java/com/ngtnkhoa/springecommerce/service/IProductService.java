@@ -14,7 +14,6 @@ public interface IProductService {
   Page<ProductResponse> findAll(
       Boolean featured,
       String categorySlug,
-      List<String> colors,
       List<String> brands,
       Double minPrice,
       Double maxPrice,

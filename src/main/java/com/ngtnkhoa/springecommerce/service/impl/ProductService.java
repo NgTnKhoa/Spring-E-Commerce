@@ -30,7 +30,6 @@ public class ProductService implements IProductService {
   public Page<ProductResponse> findAll(
           Boolean featured,
           String categorySlug,
-          List<String> colors,
           List<String> brands,
           Double minPrice,
           Double maxPrice,
@@ -38,14 +37,18 @@ public class ProductService implements IProductService {
           int page,
           int size
   ) {
-    Category category = categoryRepository.findBySlug(categorySlug)
-            .orElseThrow(() -> new RuntimeException("Category not found"));
+    Long categoryId = categoryRepository.findBySlug(categorySlug)
+              .orElseThrow(() -> new RuntimeException("Category not found")).getId();
 
-    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+    Pageable pageable = PageRequest.of(
+            page,
+            size,
+            Sort.by("name").ascending()
+    );
+
     Page<Product> products = productRepository.filter(
             featured,
-            category.getId(),
-            colors,
+            categoryId,
             brands,
             minPrice,
             maxPrice,

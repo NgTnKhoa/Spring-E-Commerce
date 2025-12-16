@@ -25,7 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     SELECT DISTINCT p FROM Product p
     WHERE (:featured IS NULL OR p.featured = :featured)
       AND (:categoryId IS NULL OR p.category.id = :categoryId)
-      AND (:colors IS NULL OR EXISTS (SELECT c FROM p.colors c WHERE c IN :colors))
       AND (:brands IS NULL OR p.brand IN :brands)
       AND (:minPrice IS NULL OR p.price >= :minPrice)
       AND (:maxPrice IS NULL OR p.price <= :maxPrice)
@@ -34,7 +33,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   Page<Product> filter(
       @Param("featured") Boolean featured,
       @Param("categoryId") Long categoryId,
-      @Param("colors") List<String> colors,
       @Param("brands") List<String> brands,
       @Param("minPrice") Double minPrice,
       @Param("maxPrice") Double maxPrice,
