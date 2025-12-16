@@ -37,8 +37,12 @@ public class ProductService implements IProductService {
           int page,
           int size
   ) {
-    Long categoryId = categoryRepository.findBySlug(categorySlug)
+    Long categoryId = null;
+
+    if (categorySlug != null && !categorySlug.isBlank()) {
+      categoryId = categoryRepository.findBySlug(categorySlug)
               .orElseThrow(() -> new RuntimeException("Category not found")).getId();
+    }
 
     Pageable pageable = PageRequest.of(
             page,
