@@ -1,6 +1,7 @@
 package com.ngtnkhoa.springecommerce.service.impl;
 
 import com.ngtnkhoa.springecommerce.dto.request.ProductRequest;
+import com.ngtnkhoa.springecommerce.dto.response.ProductListResponse;
 import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import com.ngtnkhoa.springecommerce.entity.Category;
 import com.ngtnkhoa.springecommerce.entity.Product;
@@ -27,7 +28,7 @@ public class ProductService implements IProductService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public Page<ProductResponse> findAll(
+  public ProductListResponse findAll(
           Boolean featured,
           String categorySlug,
           List<String> brands,
@@ -59,10 +60,19 @@ public class ProductService implements IProductService {
             keyword,
             pageable
     );
-    return products
+
+    Page<ProductResponse> productResponses = products
             .map(product -> productMapper
                     .toProductResponse(productMapper
                             .toProductDTO(product)));
+
+    // Get min and max prices from filtered results
+    Double actualMinPrice = productRepository.findMinPriceByFilter(
+            featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Double actualMaxPrice = productRepository.findMaxPriceByFilter(
+            featured, categoryId, brands, minPrice, maxPrice, keyword);
+
+    return new ProductListResponse(productResponses, actualMinPrice, actualMaxPrice);
   }
 
   @Override

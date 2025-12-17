@@ -39,4 +39,40 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
       @Param("keyword") String keyword,
       Pageable pageable
   );
+
+  @Query("""
+    SELECT MIN(p.price) FROM Product p
+    WHERE (:featured IS NULL OR p.featured = :featured)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
+      AND (:brands IS NULL OR p.brand IN :brands)
+      AND (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
+""")
+  Double findMinPriceByFilter(
+      @Param("featured") Boolean featured,
+      @Param("categoryId") Long categoryId,
+      @Param("brands") List<String> brands,
+      @Param("minPrice") Double minPrice,
+      @Param("maxPrice") Double maxPrice,
+      @Param("keyword") String keyword
+  );
+
+  @Query("""
+    SELECT MAX(p.price) FROM Product p
+    WHERE (:featured IS NULL OR p.featured = :featured)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
+      AND (:brands IS NULL OR p.brand IN :brands)
+      AND (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
+""")
+  Double findMaxPriceByFilter(
+      @Param("featured") Boolean featured,
+      @Param("categoryId") Long categoryId,
+      @Param("brands") List<String> brands,
+      @Param("minPrice") Double minPrice,
+      @Param("maxPrice") Double maxPrice,
+      @Param("keyword") String keyword
+  );
 }

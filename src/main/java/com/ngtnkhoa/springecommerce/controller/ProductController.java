@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.controller;
 
+import com.ngtnkhoa.springecommerce.dto.response.ProductListResponse;
 import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
 import com.ngtnkhoa.springecommerce.dto.response.ReviewResponse;
 import com.ngtnkhoa.springecommerce.service.IProductService;
@@ -9,7 +10,7 @@ import java.util.List;
 import com.ngtnkhoa.springecommerce.service.IReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ProductController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size
   ) {
-    Page<ProductResponse> products = productService.findAll(
+    ProductListResponse productListResponse = productService.findAll(
         featured,
         categorySlug,
         brands,
@@ -51,7 +52,7 @@ public class ProductController {
         .body(BaseResponse.builder()
             .message("Get products successfully")
             .status(true)
-            .data(products)
+            .data(productListResponse)
             .statusCode(HttpStatus.OK.value())
             .build());
   }
