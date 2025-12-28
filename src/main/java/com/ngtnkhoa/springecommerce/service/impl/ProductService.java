@@ -3,6 +3,7 @@ package com.ngtnkhoa.springecommerce.service.impl;
 import com.ngtnkhoa.springecommerce.dto.request.ProductRequest;
 import com.ngtnkhoa.springecommerce.dto.response.ProductListResponse;
 import com.ngtnkhoa.springecommerce.dto.response.ProductResponse;
+import com.ngtnkhoa.springecommerce.dto.response.Summary;
 import com.ngtnkhoa.springecommerce.entity.Category;
 import com.ngtnkhoa.springecommerce.entity.Product;
 import com.ngtnkhoa.springecommerce.mapper.ProductMapper;
@@ -66,13 +67,12 @@ public class ProductService implements IProductService {
                     .toProductResponse(productMapper
                             .toProductDTO(product)));
 
-    // Get min and max prices from filtered results
-    Double actualMinPrice = productRepository.findMinPriceByFilter(
-            featured, categoryId, brands, minPrice, maxPrice, keyword);
-    Double actualMaxPrice = productRepository.findMaxPriceByFilter(
-            featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Set<String> summaryBrands = productRepository.findBrandsByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Double summaryMinPrice = productRepository.findMinPriceByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Double summaryMaxPrice = productRepository.findMaxPriceByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Summary summary = new Summary(summaryBrands, summaryMinPrice, summaryMaxPrice);
 
-    return new ProductListResponse(productResponses, actualMinPrice, actualMaxPrice);
+    return new ProductListResponse(productResponses, summary);
   }
 
   @Override

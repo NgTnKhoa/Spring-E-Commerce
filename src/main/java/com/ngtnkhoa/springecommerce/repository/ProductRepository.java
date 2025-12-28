@@ -22,7 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   Set<String> findColorsByCategoryId(@Param("categoryId") Long categoryId);
 
   @Query("""
-    SELECT DISTINCT p FROM Product p
+    SELECT DISTINCT p
+    FROM Product p
     WHERE (:featured IS NULL OR p.featured = :featured)
       AND (:categoryId IS NULL OR p.category.id = :categoryId)
       AND (:brands IS NULL OR p.brand IN :brands)
@@ -41,7 +42,27 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   );
 
   @Query("""
-    SELECT MIN(p.price) FROM Product p
+    SELECT DISTINCT p.brand
+    FROM Product p
+    WHERE (:featured IS NULL OR p.featured = :featured)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
+      AND (:brands IS NULL OR p.brand IN :brands)
+      AND (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
+""")
+  Set<String> findBrandsByFilter(
+          @Param("featured") Boolean featured,
+          @Param("categoryId") Long categoryId,
+          @Param("brands") List<String> brands,
+          @Param("minPrice") Double minPrice,
+          @Param("maxPrice") Double maxPrice,
+          @Param("keyword") String keyword
+  );
+
+  @Query("""
+    SELECT MIN(p.price)
+    FROM Product p
     WHERE (:featured IS NULL OR p.featured = :featured)
       AND (:categoryId IS NULL OR p.category.id = :categoryId)
       AND (:brands IS NULL OR p.brand IN :brands)
@@ -59,7 +80,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   );
 
   @Query("""
-    SELECT MAX(p.price) FROM Product p
+    SELECT MAX(p.price)
+    FROM Product p
     WHERE (:featured IS NULL OR p.featured = :featured)
       AND (:categoryId IS NULL OR p.category.id = :categoryId)
       AND (:brands IS NULL OR p.brand IN :brands)
