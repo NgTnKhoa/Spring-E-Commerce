@@ -14,6 +14,7 @@ public class ProductResponse {
   private String slug;
   private String description;
   private double price;
+  private double salePrice;
   private int stock;
   private int rating;
   private double discount;

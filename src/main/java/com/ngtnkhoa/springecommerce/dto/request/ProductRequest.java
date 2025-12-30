@@ -2,11 +2,11 @@ package com.ngtnkhoa.springecommerce.dto.request;
 
 import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
+import com.ngtnkhoa.springecommerce.enums.ProductBadge;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -32,7 +32,7 @@ public class ProductRequest {
   @Max(value = 5, message = "Rating must be not exceed 5")
   private int rating = 0;
 
-  private double discount;
+  private double salePrice;
 
   @NotBlank(message = "Brand is required")
   private String brand;
@@ -44,6 +44,9 @@ public class ProductRequest {
 
   @NotBlank(message = "Main image is required")
   private String mainImage;
+
+  @NotNull(message = "Badge is required")
+  private ProductBadge badge;
 
   @NotEmpty(message = "At least one image is required")
   @Size(max = 5, message = "At most 5 images allowed")

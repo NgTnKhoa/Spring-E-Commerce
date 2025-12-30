@@ -19,6 +19,10 @@ public interface ProductMapper {
   ProductDTO toProductDTO(Product product);
 
   @Mapping(source = "category", target = "category")
+  @Mapping(
+          target = "discount",
+          expression = "java(calculateDiscount(productDTO.getPrice(), productDTO.getSalePrice()))"
+  )
   ProductResponse toProductResponse(ProductDTO productDTO);
 
   @Mapping(source = "colors", target = "colors")
@@ -29,4 +33,11 @@ public interface ProductMapper {
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   @Mapping(target = "category", ignore = true)
   Product toProductEntity(ProductRequest productRequest, @MappingTarget Product product);
+
+  default double calculateDiscount(double price, double salePrice) {
+    if (salePrice < 0 || salePrice >= price) {
+      return 0.0;
+    }
+    return ((price - salePrice) / price) * 100;
+  }
 }
