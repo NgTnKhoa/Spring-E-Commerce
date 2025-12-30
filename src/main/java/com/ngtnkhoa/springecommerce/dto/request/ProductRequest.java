@@ -2,7 +2,7 @@ package com.ngtnkhoa.springecommerce.dto.request;
 
 import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
-import com.ngtnkhoa.springecommerce.enums.ProductBadge;
+import com.ngtnkhoa.springecommerce.enums.ProductStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -37,16 +37,13 @@ public class ProductRequest {
   @NotBlank(message = "Brand is required")
   private String brand;
 
-  @NotBlank(message = "Status is required")
-  private String status;
+  @NotNull(message = "Status is required")
+  private ProductStatus status;
 
   private boolean featured;
 
   @NotBlank(message = "Main image is required")
   private String mainImage;
-
-  @NotNull(message = "Badge is required")
-  private ProductBadge badge;
 
   @NotEmpty(message = "At least one image is required")
   @Size(max = 5, message = "At most 5 images allowed")

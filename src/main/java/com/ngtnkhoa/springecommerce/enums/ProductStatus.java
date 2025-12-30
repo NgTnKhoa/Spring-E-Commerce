@@ -1,6 +1,6 @@
 package com.ngtnkhoa.springecommerce.enums;
 
-public enum ProductBadge {
+public enum ProductStatus {
   NONE,
   OUT_OF_STOCK,
   DISABLED,

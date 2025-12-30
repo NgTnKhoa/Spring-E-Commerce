@@ -2,7 +2,7 @@ package com.ngtnkhoa.springecommerce.entity;
 
 import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
-import com.ngtnkhoa.springecommerce.enums.ProductBadge;
+import com.ngtnkhoa.springecommerce.enums.ProductStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -46,18 +46,15 @@ public class Product extends Base {
   @Column(name = "brand")
   private String brand;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
-  private String status;
+  private ProductStatus status;
 
   @Column(name = "featured", columnDefinition = "boolean default false")
   private boolean featured;
 
   @Column(name = "main_image")
   private String mainImage;
-
-  @Column(name = "badge")
-  @Enumerated(EnumType.STRING)
-  private ProductBadge  badge;
 
   @ElementCollection
   @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))

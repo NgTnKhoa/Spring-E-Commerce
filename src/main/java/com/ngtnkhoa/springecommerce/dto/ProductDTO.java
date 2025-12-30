@@ -2,12 +2,11 @@ package com.ngtnkhoa.springecommerce.dto;
 
 import com.ngtnkhoa.springecommerce.entity.emb.ProductColor;
 import com.ngtnkhoa.springecommerce.entity.emb.ProductImage;
-import com.ngtnkhoa.springecommerce.enums.ProductBadge;
+import com.ngtnkhoa.springecommerce.enums.ProductStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class ProductDTO {
@@ -20,10 +19,9 @@ public class ProductDTO {
   private int rating;
   private double salePrice;
   private String brand;
-  private String status;
+  private ProductStatus status;
   private boolean featured;
   private String mainImage;
-  private ProductBadge badge;
   private CategoryDTO category;
   private List<ProductImage> images;
   private List<ProductColor> colors;
