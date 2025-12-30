@@ -67,7 +67,7 @@ public class ProductService implements IProductService {
                     .toProductResponse(productMapper
                             .toProductDTO(product)));
 
-    Set<String> summaryBrands = productRepository.findBrandsByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
+    Set<String> summaryBrands = productRepository.findBrandsByFilter(categoryId);
     Double summaryMinPrice = productRepository.findMinPriceByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
     Double summaryMaxPrice = productRepository.findMaxPriceByFilter(featured, categoryId, brands, minPrice, maxPrice, keyword);
     Summary summary = new Summary(summaryBrands, summaryMinPrice, summaryMaxPrice);
