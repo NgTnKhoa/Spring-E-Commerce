@@ -1,5 +1,7 @@
 package com.ngtnkhoa.springecommerce.dto.request;
 
+import com.ngtnkhoa.springecommerce.enums.PaymentMethod;
+import com.ngtnkhoa.springecommerce.enums.PaymentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,10 +17,10 @@ public class PaymentRequest {
   private String transactionCode;
 
   @NotBlank(message = "Status is required")
-  private String status;
+  private PaymentStatus status;
 
   @NotBlank(message = "Method is required")
-  private String method;
+  private PaymentMethod method;
 
   @Positive(message = "Amount must be greater than 0")
   private double amount;

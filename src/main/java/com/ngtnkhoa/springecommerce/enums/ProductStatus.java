@@ -1,10 +1,8 @@
 package com.ngtnkhoa.springecommerce.enums;
 
 public enum ProductStatus {
-  NONE,
+  DRAFT,
+  ACTIVE,
   OUT_OF_STOCK,
-  DISABLED,
-  NEW,
-  SALE,
-  HOT
+  INACTIVE,
 }

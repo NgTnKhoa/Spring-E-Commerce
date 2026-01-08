@@ -1,5 +1,7 @@
 package com.ngtnkhoa.springecommerce.entity;
 
+import com.ngtnkhoa.springecommerce.enums.PaymentMethod;
+import com.ngtnkhoa.springecommerce.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +20,10 @@ public class Payment extends Base {
   private String transactionCode;
 
   @Column(name = "status")
-  private String status;
+  private PaymentStatus status;
 
   @Column(name = "method")
-  private String method;
+  private PaymentMethod method;
 
   @Column(name = "amount")
   private String amount;
