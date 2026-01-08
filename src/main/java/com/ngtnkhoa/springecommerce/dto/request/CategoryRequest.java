@@ -1,11 +1,9 @@
 package com.ngtnkhoa.springecommerce.dto.request;
 
+import com.ngtnkhoa.springecommerce.enums.CategoryStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class CategoryRequest {
@@ -24,7 +22,7 @@ public class CategoryRequest {
   private boolean featured;
 
   @NotBlank(message = "Status is required")
-  private String status;
+  private CategoryStatus status;
 
   private Long parentId;
 }

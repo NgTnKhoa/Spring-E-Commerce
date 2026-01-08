@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.entity;
 
+import com.ngtnkhoa.springecommerce.enums.CategoryStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class Category extends Base {
   private boolean featured;
 
   @Column(name = "status")
-  private String status;
+  private CategoryStatus status;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")

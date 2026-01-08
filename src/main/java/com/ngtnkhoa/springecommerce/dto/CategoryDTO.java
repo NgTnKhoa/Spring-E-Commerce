@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.dto;
 
+import com.ngtnkhoa.springecommerce.enums.CategoryStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class CategoryDTO {
   private String description;
   private String image;
   private boolean featured;
-  private String status;
+  private CategoryStatus status;
   private Long parentId;
   private String parentName;
   private LocalDateTime createdDate;
