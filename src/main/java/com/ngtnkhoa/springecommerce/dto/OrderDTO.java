@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.dto;
 
+import com.ngtnkhoa.springecommerce.enums.OrderStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public class OrderDTO {
   private String orderCode;
   private double totalAmount;
   private String address;
-  private String status;
+  private OrderStatus status;
   private String paymentMethod;
   private UserDTO user;
   private List<PaymentDTO> payments;

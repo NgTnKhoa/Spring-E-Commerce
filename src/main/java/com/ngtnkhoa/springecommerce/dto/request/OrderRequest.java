@@ -2,6 +2,7 @@ package com.ngtnkhoa.springecommerce.dto.request;
 
 import java.util.List;
 
+import com.ngtnkhoa.springecommerce.enums.OrderStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,7 +20,7 @@ public class OrderRequest {
   private double totalAmount;
 
   @NotBlank(message = "Status is required")
-  private String status;
+  private OrderStatus status;
 
   @NotBlank(message = "Address is required")
   private String address;
