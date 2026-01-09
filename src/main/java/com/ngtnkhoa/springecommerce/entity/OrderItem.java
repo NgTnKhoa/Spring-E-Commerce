@@ -21,6 +21,9 @@ public class OrderItem extends Base {
   @Column(name = "quantity")
   private int quantity;
 
+  @Column(name = "product_price")
+  private double productPrice;
+
   @Column(name = "total_amount")
   private double totalAmount;
 

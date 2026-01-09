@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class OrderItemResponse {
   private Long id;
   private Long productId;
+  private double productPrice;
   private Long orderId;
   private int quantity;
   private double totalAmount;

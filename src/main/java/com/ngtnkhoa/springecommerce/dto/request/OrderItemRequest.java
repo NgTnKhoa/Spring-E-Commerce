@@ -10,6 +10,9 @@ public class OrderItemRequest {
   @NotNull(message = "Product ID is required")
   private Long productId;
 
+  @Positive(message = "Product price must be greater than 0")
+  private double productPrice;
+
   @NotNull(message = "Order ID is required")
   private Long orderId;
 
