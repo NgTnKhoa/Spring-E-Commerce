@@ -1,6 +1,7 @@
 package com.ngtnkhoa.springecommerce.entity;
 
 import com.ngtnkhoa.springecommerce.enums.OrderStatus;
+import com.ngtnkhoa.springecommerce.enums.PaymentMethod;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -25,15 +26,19 @@ public class Order extends Base {
   @Column(name = "total_amount")
   private double totalAmount;
 
-  @Column(name = "address")
-  private String address;
+  @Column(name = "discount_amount")
+  private double discountAmount;
+
+  @Column(name = "final_amount")
+  private double finalAmount;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private OrderStatus status;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "payment_method")
-  private String paymentMethod;
+  private PaymentMethod paymentMethod;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

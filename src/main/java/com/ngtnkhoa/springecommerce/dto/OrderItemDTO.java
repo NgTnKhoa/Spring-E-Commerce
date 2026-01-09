@@ -10,9 +10,9 @@ public class OrderItemDTO {
   private Long productId;
   private Long orderId;
   private int quantity;
-  private double unitPrice;
-  private double discount;
-  private double totalPrice;
+  private double totalAmount;
+  private double discountAmount;
+  private double finalAmount;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 }

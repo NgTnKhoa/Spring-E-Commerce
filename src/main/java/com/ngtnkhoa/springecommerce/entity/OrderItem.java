@@ -21,14 +21,14 @@ public class OrderItem extends Base {
   @Column(name = "quantity")
   private int quantity;
 
-  @Column(name = "unit_price")
-  private double unitPrice;
+  @Column(name = "total_amount")
+  private double totalAmount;
 
-  @Column(name = "discount")
-  private double discount;
+  @Column(name = "discount_amount")
+  private double discountAmount;
 
-  @Column(name = "total_price")
-  private double totalPrice;
+  @Column(name = "final_amount")
+  private double finalAmount;
 
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
