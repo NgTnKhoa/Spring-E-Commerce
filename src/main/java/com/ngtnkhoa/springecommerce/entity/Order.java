@@ -28,6 +28,7 @@ public class Order extends Base {
   @Column(name = "address")
   private String address;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private OrderStatus status;
 

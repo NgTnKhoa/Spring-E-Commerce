@@ -34,6 +34,7 @@ public class Category extends Base {
   @Column(name = "featured")
   private boolean featured;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private CategoryStatus status;
 

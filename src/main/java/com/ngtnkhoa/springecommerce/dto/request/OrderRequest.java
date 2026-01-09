@@ -19,7 +19,7 @@ public class OrderRequest {
   @Positive(message = "Total amount must be greater than 0")
   private double totalAmount;
 
-  @NotBlank(message = "Status is required")
+  @NotNull(message = "Status is required")
   private OrderStatus status;
 
   @NotBlank(message = "Address is required")

@@ -19,9 +19,11 @@ public class Payment extends Base {
   @Column(name = "transaction_code")
   private String transactionCode;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private PaymentStatus status;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "method")
   private PaymentMethod method;
 

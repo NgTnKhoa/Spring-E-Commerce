@@ -16,10 +16,10 @@ public class PaymentRequest {
   @NotBlank(message = "Transaction code is required")
   private String transactionCode;
 
-  @NotBlank(message = "Status is required")
+  @NotNull(message = "Status is required")
   private PaymentStatus status;
 
-  @NotBlank(message = "Method is required")
+  @NotNull(message = "Method is required")
   private PaymentMethod method;
 
   @Positive(message = "Amount must be greater than 0")
