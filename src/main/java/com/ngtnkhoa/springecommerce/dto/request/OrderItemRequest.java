@@ -7,14 +7,14 @@ import lombok.Data;
 @Data
 public class OrderItemRequest {
 
+  @NotNull(message = "Order ID is required")
+  private Long orderId;
+
   @NotNull(message = "Product ID is required")
   private Long productId;
 
   @Positive(message = "Product price must be greater than 0")
   private double productPrice;
-
-  @NotNull(message = "Order ID is required")
-  private Long orderId;
 
   @Positive(message = "Amount must be greater than 0")
   private int quantity;

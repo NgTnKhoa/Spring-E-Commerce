@@ -4,10 +4,12 @@ import com.ngtnkhoa.springecommerce.dto.request.OrderRequest;
 import com.ngtnkhoa.springecommerce.dto.response.OrderResponse;
 import com.ngtnkhoa.springecommerce.entity.Order;
 import com.ngtnkhoa.springecommerce.entity.OrderItem;
+import com.ngtnkhoa.springecommerce.entity.Product;
 import com.ngtnkhoa.springecommerce.mapper.OrderItemMapper;
 import com.ngtnkhoa.springecommerce.mapper.OrderMapper;
 import com.ngtnkhoa.springecommerce.repository.OrderItemRepository;
 import com.ngtnkhoa.springecommerce.repository.OrderRepository;
+import com.ngtnkhoa.springecommerce.repository.ProductRepository;
 import com.ngtnkhoa.springecommerce.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ public class OrderService implements IOrderService {
   private final OrderItemMapper orderItemMapper;
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
+  private final ProductRepository productRepository;
 
   @Override
   public Page<OrderResponse> findAll(
@@ -58,8 +61,11 @@ public class OrderService implements IOrderService {
 
     List<OrderItem> orderItems = orderRequest.getOrderItems().stream()
             .map(itemReq -> {
+              Product product = productRepository.findById(itemReq.getProductId())
+                      .orElseThrow(() -> new IllegalArgumentException("Product not found"));
               OrderItem item = orderItemMapper.toOrderItemEntity(itemReq);
               item.setOrder(order);
+              item.setProduct(product);
               return item;
             }).toList();
 
