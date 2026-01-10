@@ -1,5 +1,6 @@
 package com.ngtnkhoa.springecommerce.dto;
 
+import com.ngtnkhoa.springecommerce.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,5 +18,5 @@ public class UserDTO {
 
   private String phoneNumber;
 
-  private String role;
+  private UserRole role;
 }
